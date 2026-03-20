@@ -1,0 +1,155 @@
+/* Login.css */
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)),
+    url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.login-container {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  width: 100%;
+  gap: 2rem;
+}
+
+.login-info {
+  flex: 1 1 400px;
+  color: #1e2a3a;
+}
+
+.login-info h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.login-info p {
+  margin-bottom: 1rem;
+}
+
+.login-info ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.login-card {
+  flex: 1 1 350px;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.login-card h2 {
+  margin-bottom: 0.25rem;
+}
+
+.login-card p {
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+
+input:focus {
+  outline: none;
+  border-color: #0077b6;
+}
+
+.password-wrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.show-btn {
+  background: #0077b6;
+  color: #fff;
+  border: none;
+  padding: 0 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.show-btn:hover {
+  opacity: 0.85;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: linear-gradient(45deg, #0077b6, #00a8e8);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.forgot-password a {
+  text-decoration: none;
+  color: #0077b6;
+}
+
+.signup-link {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.signup-link a {
+  font-weight: 600;
+  color: #0077b6;
+}
+
+.message {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  text-align: center;
+}
+
+.message.success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.message.error {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.error {
+  font-size: 0.8rem;
+  color: red;
+}
+
+footer {
+  margin-top: 2rem;
+  text-align: center;
+  color: #4a5568;
+}
