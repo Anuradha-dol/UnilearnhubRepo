@@ -28,12 +28,15 @@ public class ForgotPasswordController {
     }
 
     @PostMapping("/verify-otp")
-    public ResponseEntity<String> verifyOtp(@RequestBody Map<String, String> request, HttpServletRequest httpRequest, HttpServletResponse response) {
+    public ResponseEntity<String> verifyOtp(@RequestBody Map<String, String> request,
+                                            HttpServletRequest httpRequest,
+                                            HttpServletResponse response) {
         return forgotPasswordService.verifyOtp(request, httpRequest, response);
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<String> changePassword(HttpServletRequest request, HttpServletResponse response,
+    public ResponseEntity<String> changePassword(HttpServletRequest request,
+                                                 HttpServletResponse response,
                                                  @RequestBody UserDto.ChangePassword dto) {
         return forgotPasswordService.changePassword(request, response, dto);
     }

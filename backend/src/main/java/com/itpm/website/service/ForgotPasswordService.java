@@ -1,6 +1,5 @@
 package com.itpm.website.service;
 
-
 import com.itpm.website.dtos.UserDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,12 +16,4 @@ public interface ForgotPasswordService {
     ResponseEntity<String> verifyOtp(Map<String, String> request, HttpServletRequest httpRequest, HttpServletResponse response);
 
     ResponseEntity<String> changePassword(HttpServletRequest request, HttpServletResponse response, UserDto.ChangePassword dto);
-
-    int generateOtp();
-
-    void sendOtpEmail(String email, int otp);
-
-    void sendOtpSms(String phoneNumber, int otp);
-
-    String getEmailFromCookie(HttpServletRequest request);
 }

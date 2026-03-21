@@ -34,7 +34,7 @@ public class SecurityConfig {
                     CorsConfiguration crf = new CorsConfiguration();
                     crf.setAllowedOrigins(List.of("http://localhost:5173"));
                     crf.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    crf.setAllowedHeaders(List.of("*")); // ✅ Correct
+                    crf.setAllowedHeaders(List.of("*"));
                     crf.setAllowCredentials(true);
                     crf.setMaxAge(3600L);
                     return crf;
