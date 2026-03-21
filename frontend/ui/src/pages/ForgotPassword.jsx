@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import api from "../api";
 import "./ForgotPassword.css";
 
@@ -63,16 +65,22 @@ export default function ForgotPassword() {
 
   const handleSendOtp = async () => {
     const errs = validateStep(1);
-    if (Object.keys(errs).length) return setErrors(errs);
+    if (Object.keys(errs).length) {
+      Object.values(errs).forEach((msg) => toast.error(msg));
+      return setErrors(errs);
+    }
     setLoading(true);
     setMessage("");
     try {
       const res = await api.post("/forgotpass/send-otp", form, { withCredentials: true });
       setMessage(res.data.message || "OTP sent!");
+      toast.success(res.data.message || "OTP sent!");
       startOtpTimer();
       setStep(2);
     } catch (err) {
-      setMessage(err.response?.data?.message || "Failed to send OTP");
+      const msg = err.response?.data?.message || "Failed to send OTP";
+      setMessage(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -80,14 +88,21 @@ export default function ForgotPassword() {
 
   const handleVerifyOtp = async () => {
     const errs = validateStep(2);
-    if (Object.keys(errs).length) return setErrors(errs);
+    if (Object.keys(errs).length) {
+      Object.values(errs).forEach((msg) => toast.error(msg));
+      return setErrors(errs);
+    }
     setLoading(true);
     try {
       const res = await api.post("/forgotpass/verify-otp", { otp: form.otp }, { withCredentials: true });
-      setMessage(res.data.message || "OTP verified");
+      const msg = res.data.message || "OTP verified";
+      setMessage(msg);
+      toast.success(msg);
       setStep(3);
     } catch (err) {
-      setMessage(err.response?.data?.message || "Invalid OTP");
+      const msg = err.response?.data?.message || "Invalid OTP";
+      setMessage(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -97,10 +112,14 @@ export default function ForgotPassword() {
     setLoading(true);
     try {
       const res = await api.post("/forgotpass/resend-otp", {}, { withCredentials: true });
-      setMessage(res.data.message || "OTP resent");
+      const msg = res.data.message || "OTP resent";
+      setMessage(msg);
+      toast.success(msg);
       startOtpTimer();
     } catch (err) {
-      setMessage(err.response?.data?.message || "Resend failed");
+      const msg = err.response?.data?.message || "Resend failed";
+      setMessage(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -108,14 +127,21 @@ export default function ForgotPassword() {
 
   const handleChangePassword = async () => {
     const errs = validateStep(3);
-    if (Object.keys(errs).length) return setErrors(errs);
+    if (Object.keys(errs).length) {
+      Object.values(errs).forEach((msg) => toast.error(msg));
+      return setErrors(errs);
+    }
     setLoading(true);
     try {
       const res = await api.post("/forgotpass/change-password", form, { withCredentials: true });
-      setMessage(res.data.message || "Password changed!");
+      const msg = res.data.message || "Password changed!";
+      setMessage(msg);
+      toast.success(msg);
       setTimeout(() => navigate("/login", { state: { message: "Password reset successful" } }), 2000);
     } catch (err) {
-      setMessage(err.response?.data?.message || "Failed to change password");
+      const msg = err.response?.data?.message || "Failed to change password";
+      setMessage(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -123,11 +149,10 @@ export default function ForgotPassword() {
 
   return (
     <div className="forgot-page">
+      <ToastContainer position="top-right" />
       <div className="forgot-container">
         <h2>Reset Password</h2>
-        <p>Step {step} of 3: {steps[step - 1]}</p>
-
-        {message && <div className={`message ${message.includes("success") || message.includes("sent") ? "success" : "error"}`}>{message}</div>}
+        <p className="step-indicator">Step {step} of 3: {steps[step - 1]}</p>
 
         {/* Step 1 */}
         {step === 1 && (
@@ -144,12 +169,13 @@ export default function ForgotPassword() {
           </div>
         )}
 
- 
+        {/* Step 2 */}
         {step === 2 && (
           <div className="step-content">
             <label>OTP (6 digits)</label>
             <input type="text" name="otp" value={form.otp} onChange={handleChange} maxLength={6} />
             {errors.otp && <span className="error">{errors.otp}</span>}
+
             <div className="otp-controls">
               <button onClick={handleResendOtp} disabled={otpTimer > 0 || loading}>
                 {otpTimer > 0 ? `Resend in ${otpTimer}s` : "Resend"}
@@ -159,32 +185,36 @@ export default function ForgotPassword() {
           </div>
         )}
 
-   
+        {/* Step 3 */}
         {step === 3 && (
           <div className="step-content">
             <label>New Password</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-            />
+            <div className="password-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+              />
+              <button type="button" onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
             {errors.password && <span className="error">{errors.password}</span>}
-            <button type="button" onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? "Hide" : "Show"}
-            </button>
 
             <label>Confirm Password</label>
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              name="repeatPassword"
-              value={form.repeatPassword}
-              onChange={handleChange}
-            />
+            <div className="password-wrapper">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="repeatPassword"
+                value={form.repeatPassword}
+                onChange={handleChange}
+              />
+              <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                {showConfirmPassword ? "Hide" : "Show"}
+              </button>
+            </div>
             {errors.repeatPassword && <span className="error">{errors.repeatPassword}</span>}
-            <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-              {showConfirmPassword ? "Hide" : "Show"}
-            </button>
           </div>
         )}
 
@@ -192,7 +222,11 @@ export default function ForgotPassword() {
           <button type="button" onClick={() => (step === 1 ? navigate("/login") : setStep(step - 1))} disabled={loading}>
             {step === 1 ? "Back to Login" : "Back"}
           </button>
-          <button type="button" onClick={step === 1 ? handleSendOtp : step === 2 ? handleVerifyOtp : handleChangePassword} disabled={loading}>
+          <button
+            type="button"
+            onClick={step === 1 ? handleSendOtp : step === 2 ? handleVerifyOtp : handleChangePassword}
+            disabled={loading}
+          >
             {loading ? "Loading..." : step === 1 ? "Send OTP" : step === 2 ? "Verify" : "Reset"}
           </button>
         </div>

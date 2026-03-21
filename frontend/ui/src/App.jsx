@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard";
 import Review from "./review/Review";
 import SupportAdmin from "./review/SupportAdmin";
 import SupportUser from "./review/SupportUser";
+import LandingPage from "./landing/LandingPage";
 
 
 
@@ -46,6 +47,8 @@ function App() {
           <Route path="/Review" element={<Review />} />
           <Route path="/SupportAdmin" element={<SupportAdmin/>} />
           <Route path="/SupportUser" element={<SupportUser/>} />
+            <Route path="/" element={<LandingPage/>} />
+
        
 
       

@@ -1,8 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
-
 
 
 const interestMap = {
@@ -38,19 +36,8 @@ export default function Profile() {
     fetchProfile();
   }, [navigate]);
 
-  const handleLogout = async () => {
-    try {
-      await api.post("/auth/logout", {}, { withCredentials: true });
-      localStorage.clear();
-      navigate("/login", { state: { message: "Logged out successfully" } });
-    } catch {
-      // ignore
-    }
-  };
-
   if (loading) return <div style={{ padding: "20px", textAlign: "center" }}>Loading...</div>;
   if (error) return <div style={{ padding: "20px", color: "red" }}>{error}</div>;
-
 
   const firstName = profile?.firstname || profile?.firstName || "";
   const lastName = profile?.lastName || "";
@@ -63,19 +50,17 @@ export default function Profile() {
 
   const avatarFallback = firstName ? firstName.charAt(0).toUpperCase() : "U";
 
-
   const backendBaseUrl = api.defaults.baseURL || "";
   const profileImageFullUrl = profileImageUrl ? backendBaseUrl + profileImageUrl : null;
   const coverImageFullUrl = coverImageUrl ? backendBaseUrl + coverImageUrl : null;
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial" }}>
-     
       <div style={{ position: "relative", height: "200px", backgroundColor: "#ddd", marginBottom: "70px" }}>
         {coverImageFullUrl && (
           <img src={coverImageFullUrl} alt="Cover" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         )}
-    
+
         <div style={{
           position: "absolute",
           bottom: "-50px",
@@ -98,7 +83,6 @@ export default function Profile() {
         </div>
       </div>
 
-  
       <div style={{ textAlign: "center", marginBottom: "30px" }}>
         <h2>{firstName} {lastName}</h2>
         {profile?.role && (
@@ -108,7 +92,6 @@ export default function Profile() {
         )}
       </div>
 
-    
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", justifyContent: "center", marginBottom: "30px" }}>
         <div style={{ border: "1px solid #2196f3", padding: "15px", borderRadius: "10px", minWidth: "150px", textAlign: "center" }}>
           <div style={{ fontWeight: "bold" }}>Email</div>
@@ -130,17 +113,14 @@ export default function Profile() {
         )}
       </div>
 
-  
       <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}>
         <button onClick={() => navigate("/settings")} style={{ padding: "10px 20px", backgroundColor: "#e91e63", color: "white", border: "none", borderRadius: "20px" }}>
           Edit Profile
         </button>
-        <button onClick={handleLogout} style={{ padding: "10px 20px", backgroundColor: "white", color: "#f44336", border: "1px solid #f44336", borderRadius: "20px" }}>
+        <button onClick={() => navigate("/login")} style={{ padding: "10px 20px", backgroundColor: "white", color: "#f44336", border: "1px solid #f44336", borderRadius: "20px" }}>
           Logout
         </button>
       </div>
-
-
     </div>
   );
 }

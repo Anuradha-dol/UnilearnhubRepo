@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import api from "../api";
 
 export default function VerifyOtp() {
   const [otp, setOtp] = useState("");
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
 
   const toMessage = (data) => {
     if (!data) return "Something went wrong";
@@ -15,11 +15,10 @@ export default function VerifyOtp() {
     return "Something went wrong";
   };
 
-
   const handleVerify = async (e) => {
     e.preventDefault();
     if (!otp.trim()) {
-      setMessage("OTP is required");
+      toast.error("OTP is required", { position: "top-right" });
       return;
     }
 
@@ -31,22 +30,23 @@ export default function VerifyOtp() {
         { withCredentials: true }
       );
 
-      setMessage(toMessage(res.data));
+      const msg = toMessage(res.data);
 
       if (res.data.success) {
-   
+        toast.success(msg || "OTP verified successfully! 🎉", { position: "top-right" });
         setTimeout(() => {
           window.location.href = "/login";
-        }, 1000);
+        }, 1500);
+      } else {
+        toast.error(msg, { position: "top-right" });
       }
     } catch (err) {
       console.error(err.response?.data || err);
-      setMessage(toMessage(err.response?.data));
+      toast.error(toMessage(err.response?.data), { position: "top-right" });
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleResend = async () => {
     try {
@@ -56,10 +56,10 @@ export default function VerifyOtp() {
         {},
         { withCredentials: true }
       );
-      setMessage(toMessage(res.data));
+      toast.info(toMessage(res.data) || "OTP resent successfully! ✨", { position: "top-right" });
     } catch (err) {
       console.error(err.response?.data || err);
-      setMessage(toMessage(err.response?.data));
+      toast.error(toMessage(err.response?.data), { position: "top-right" });
     } finally {
       setLoading(false);
     }
@@ -76,13 +76,8 @@ export default function VerifyOtp() {
         gap: "10px",
       }}
     >
+      <ToastContainer />
       <h2>Verify OTP</h2>
-
-      {message && (
-        <p style={{ color: message.toLowerCase().includes("error") ? "red" : "green" }}>
-          {message}
-        </p>
-      )}
 
       <form onSubmit={handleVerify} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <input

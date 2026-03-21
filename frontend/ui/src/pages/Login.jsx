@@ -1,13 +1,13 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import api from "../api";
 import "./Login.css"; 
 
 export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
-  const [message, setMessage] = useState("");
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -28,14 +28,20 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+
+      //show validation errors as toast
+      Object.values(validationErrors).forEach(msg =>
+        toast.error(msg, { position: "top-right" })
+      );
+
       return;
     }
 
     setLoading(true);
-    setMessage("");
 
     try {
       const res = await api.post("/auth/login", form, {
@@ -44,7 +50,8 @@ export default function Login() {
       });
 
       if (res.data.success) {
-        setMessage("Login successful! Redirecting...");
+        toast.success("🎉 Login successful! Redirecting...", { position: "top-right" });
+
         if (res.data.token) localStorage.setItem("token", res.data.token);
         if (res.data.user) localStorage.setItem("user", JSON.stringify(res.data.user));
 
@@ -54,11 +61,15 @@ export default function Login() {
           else if (role === "ROLE_MANAGER") navigate("/management");
           else navigate("/home");
         }, 1500);
+
       } else {
-        setMessage(res.data.message || "Login failed. Check credentials.");
+        toast.error(res.data.message || "Login failed. Check credentials.", { position: "top-right" });
       }
+
     } catch (err) {
-      setMessage(err.response?.data?.message || "Unable to connect to server.");
+      toast.error(err.response?.data?.message || "Unable to connect to server.", {
+        position: "top-right",
+      });
     } finally {
       setLoading(false);
     }
@@ -66,6 +77,10 @@ export default function Login() {
 
   return (
     <div className="login-page">
+      
+  
+      <ToastContainer />
+
       <div className="login-container">
     
         <div className="login-info">
@@ -79,16 +94,9 @@ export default function Login() {
           <p>Join 50,000+ learners already sharing solutions.</p>
         </div>
 
-      
         <div className="login-card">
           <h2>Welcome Back</h2>
           <p>Sign in to continue your learning journey</p>
-
-          {message && (
-            <div className={`message ${message.includes("successful") ? "success" : "error"}`}>
-              {message}
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} noValidate>
             <div className="form-group">
@@ -127,7 +135,7 @@ export default function Login() {
             </div>
 
             <button type="submit" disabled={loading} className="login-btn">
-              {loading ? "Loading..." : "Login"}
+              {loading ? "⏳ Logging in..." : "Login"}
             </button>
           </form>
 

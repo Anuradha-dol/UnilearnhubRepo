@@ -153,3 +153,39 @@ footer {
   text-align: center;
   color: #4a5568;
 }
+
+/* 🔥 Alert UI */
+.alert-box {
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  font-weight: 500;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+/* ✅ Success */
+.alert-box.success {
+  background: #e6f9f0;
+  color: #0f9d58;
+  border-left: 5px solid #0f9d58;
+}
+
+/* ❌ Error */
+.alert-box.error {
+  background: #fdecea;
+  color: #d93025;
+  border-left: 5px solid #d93025;
+}
+
+/* ✨ Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
