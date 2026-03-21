@@ -34,70 +34,62 @@ public class AuthServiceimpl implements AuthService {
     @Override
     public AuthResponse signUp(UserDto.RegisterRequest registerRequest) {
 
-        // 1️⃣ Check if a user with this email already exists
+        //  Check if a user with this email already exists
         Optional<User> optionalUser = userRepo.findByEmail(registerRequest.email());
-        User user;
-
         if (optionalUser.isPresent()) {
-            user = optionalUser.get();
+            User existingUser = optionalUser.get();
 
             // Block if already verified or verification code still valid
-            if (user.getIsVerified() || (user.getVerifyCodeExpiry() != null && user.getVerifyCodeExpiry().after(new Date()))) {
+            if (existingUser.getIsVerified() ||
+                    (existingUser.getVerifyCodeExpiry() != null && existingUser.getVerifyCodeExpiry().after(new Date()))) {
                 return AuthResponse.builder()
                         .message("Email already exists!")
                         .success(false)
                         .build();
             }
 
-            // Reuse unverified user
-            user.setFirstname(registerRequest.firstname());
-            user.setLastName(registerRequest.lastName());
-            user.setPassword(passwordEncoder.encode(registerRequest.password()));
-            user.setPhoneNumber(registerRequest.phoneNumber());
-            user.setTempEmail(registerRequest.tempEmail());
-            user.setInterest(registerRequest.interest());
-            user.setRole(
-                    registerRequest.role() != null
-                            ? registerRequest.role()
-                            : Role.ROLE_USER
-            );
-
-            user.setIsVerified(false);
-
-        } else {
-            // 2️⃣ Create new user
-            user = new User();
-            user.setFirstname(registerRequest.firstname());
-            user.setLastName(registerRequest.lastName());
-            user.setEmail(registerRequest.email());
-            user.setPassword(passwordEncoder.encode(registerRequest.password()));
-            user.setPhoneNumber(registerRequest.phoneNumber());
-            user.setTempEmail(registerRequest.tempEmail());
-            user.setRole(registerRequest.role());
-            user.setInterest(registerRequest.interest());
-
-            user.setIsVerified(false);
+            // If unverified, reuse this user object (update later)
         }
 
-        // 3️⃣ Validate phone number uniqueness
-        if (user.getPhoneNumber() == null || user.getPhoneNumber().isBlank()) {
-            throw new RuntimeException("Phone number is required");
-        }
-        Optional<User> phoneExists = userRepo.findByPhoneNumber(user.getPhoneNumber());
-        if (phoneExists.isPresent() && !phoneExists.get().getEmail().equals(user.getEmail())) {
-            throw new RuntimeException("Phone number already registered");
+        //  Validate phone number uniqueness BEFORE creating/saving
+        if (registerRequest.phoneNumber() == null || registerRequest.phoneNumber().isBlank()) {
+            return AuthResponse.builder()
+                    .message("Phone number is required")
+                    .success(false)
+                    .build();
         }
 
-        // 4️⃣ Generate 6-digit verification code
+        Optional<User> phoneExists = userRepo.findByPhoneNumber(registerRequest.phoneNumber());
+        if (phoneExists.isPresent() &&
+                (optionalUser.isEmpty() || !phoneExists.get().getEmail().equals(registerRequest.email()))) {
+            return AuthResponse.builder()
+                    .message("Phone number already registered")
+                    .success(false)
+                    .build();
+        }
+
+        //  All validations passed → now create or update user
+        User user = optionalUser.orElse(new User());
+        user.setFirstname(registerRequest.firstname());
+        user.setLastName(registerRequest.lastName());
+        user.setEmail(registerRequest.email());
+        user.setPassword(passwordEncoder.encode(registerRequest.password()));
+        user.setPhoneNumber(registerRequest.phoneNumber());
+        user.setTempEmail(registerRequest.tempEmail());
+        user.setRole(registerRequest.role() != null ? registerRequest.role() : Role.ROLE_USER);
+        user.setInterest(registerRequest.interest());
+        user.setIsVerified(false);
+
+        //  Generate 6-digit verification code
         int verificationCode = (int) (Math.random() * 900_000) + 100_000;
         user.setVerifyCode(String.valueOf(verificationCode));
         user.setVerifyCodeExpiry(new Date(System.currentTimeMillis() + 2 * 60 * 1000)); // 2 min expiry
         user.setLastOtpSentAt(new Date());
 
-        // 5️⃣ Save user to DB
+        //  Save user AFTER all validations
         User savedUser = userRepo.save(user);
 
-        // 6️⃣ Prepare verification email
+        // Prepare verification email
         final String subject = "Verify your account";
         final String EMAIL_TEMPLATE = """
         <html>
@@ -112,7 +104,7 @@ public class AuthServiceimpl implements AuthService {
         </html>
         """.formatted(savedUser.getFirstname(), savedUser.getVerifyCode(), savedUser.getEmail(), savedUser.getVerifyCode());
 
-        // 7️⃣ Send email
+        //  Send email
         try {
             MailBody mailBody = new MailBody(savedUser.getEmail(), subject, EMAIL_TEMPLATE);
             emailUtils.sendMail(mailBody);
@@ -124,7 +116,7 @@ public class AuthServiceimpl implements AuthService {
                     .build();
         }
 
-        // 8️⃣ Return response
+        //  Return success response
         return AuthResponse.builder()
                 .firstname(savedUser.getFirstname())
                 .email(savedUser.getEmail())

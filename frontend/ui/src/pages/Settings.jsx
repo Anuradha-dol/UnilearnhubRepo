@@ -1,13 +1,13 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./Settings.css";
 
 export default function Settings() {
   const navigate = useNavigate();
 
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -36,10 +36,6 @@ export default function Settings() {
   const [profileFile, setProfileFile] = useState(null);
   const [coverFile, setCoverFile] = useState(null);
 
-  const [emailDialogOpen, setEmailDialogOpen] = useState(false);
-  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -62,21 +58,56 @@ export default function Settings() {
     fetchUser();
   }, []);
 
+  //VALIDATIONS
+
+  const validateName = () => {
+    if (!nameForm.name.trim()) return toast.error("First name is required");
+    if (!nameForm.lastName.trim()) return toast.error("Last name is required");
+    return true;
+  };
+
+  const validateEmail = () => {
+    if (!emailForm.newEmail) return toast.error("Email is required");
+    if (!/\S+@\S+\.\S+/.test(emailForm.newEmail))
+      return toast.error("Invalid email format");
+    return true;
+  };
+
+  const validatePassword = () => {
+    if (!passwordForm.currentPassword)
+      return toast.error("Current password required");
+    if (passwordForm.newPassword.length < 6)
+      return toast.error("Password must be at least 6 characters");
+    if (passwordForm.newPassword !== passwordForm.confirmPassword)
+      return toast.error("Passwords do not match");
+    return true;
+  };
+
+  const validateDelete = () => {
+    if (!deleteForm.currentPassword)
+      return toast.error("Enter password to delete account");
+    return true;
+  };
+
+  //HANDLERS
+
   const handleResponse = (res, redirectLogin = false) => {
-    setMessage(res.data?.message || "Success");
-    setError("");
+    toast.success(res.data?.message || "Success");
     if (redirectLogin) setTimeout(() => navigate("/login"), 1500);
   };
 
   const handleError = (err) => {
-    setError(err.response?.data?.message || "Something went wrong");
-    setMessage("");
+    toast.error(err.response?.data?.message || "Something went wrong");
   };
 
   const updateName = async () => {
+    if (!validateName()) return;
+
     setLoading(true);
     try {
-      const res = await api.put("/user/update-name", nameForm, { withCredentials: true });
+      const res = await api.put("/user/update-name", nameForm, {
+        withCredentials: true,
+      });
       handleResponse(res);
       setUser({ ...user, firstName: nameForm.name, lastName: nameForm.lastName });
     } catch (err) {
@@ -87,9 +118,15 @@ export default function Settings() {
   };
 
   const requestEmailUpdate = async () => {
+    if (!validateEmail()) return;
+
     setLoading(true);
     try {
-      const res = await api.put("/user/update-email", { newEmail: emailForm.newEmail }, { withCredentials: true });
+      const res = await api.put(
+        "/user/update-email",
+        { newEmail: emailForm.newEmail },
+        { withCredentials: true }
+      );
       handleResponse(res);
     } catch (err) {
       handleError(err);
@@ -99,6 +136,8 @@ export default function Settings() {
   };
 
   const verifyNewEmail = async () => {
+    if (!emailForm.otp) return toast.error("OTP required");
+
     setLoading(true);
     try {
       const res = await api.post("/user/verify-new-email", null, {
@@ -106,7 +145,6 @@ export default function Settings() {
         withCredentials: true,
       });
       handleResponse(res, true);
-      setEmailDialogOpen(false);
     } catch (err) {
       handleError(err);
     } finally {
@@ -115,11 +153,14 @@ export default function Settings() {
   };
 
   const updatePassword = async () => {
+    if (!validatePassword()) return;
+
     setLoading(true);
     try {
-      const res = await api.put("/user/update-password", passwordForm, { withCredentials: true });
+      const res = await api.put("/user/update-password", passwordForm, {
+        withCredentials: true,
+      });
       handleResponse(res, true);
-      setPasswordDialogOpen(false);
     } catch (err) {
       handleError(err);
     } finally {
@@ -128,11 +169,15 @@ export default function Settings() {
   };
 
   const deleteAccount = async () => {
+    if (!validateDelete()) return;
+
     setLoading(true);
     try {
-      const res = await api.delete("/user/delete", { data: deleteForm, withCredentials: true });
+      const res = await api.delete("/user/delete", {
+        data: deleteForm,
+        withCredentials: true,
+      });
       handleResponse(res, true);
-      setDeleteDialogOpen(false);
     } catch (err) {
       handleError(err);
     } finally {
@@ -141,127 +186,151 @@ export default function Settings() {
   };
 
   const uploadProfileImage = async () => {
-    if (!profileFile) return;
+    if (!profileFile) return toast.error("Select a profile image");
+
     setUploading(true);
     const formData = new FormData();
     formData.append("file", profileFile);
+
     try {
       const res = await api.post("/user/upload-profile-image", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
-      setMessage("Profile image uploaded successfully!");
+      toast.success("Profile image uploaded!");
       setUser({ ...user, profileImageUrl: res.data.imageUrl || res.data });
-      setProfileFile(null);
     } catch (err) {
-      setError(err.response?.data?.message || "Upload failed");
+      handleError(err);
     } finally {
       setUploading(false);
     }
   };
 
   const uploadCoverImage = async () => {
-    if (!coverFile) return;
+    if (!coverFile) return toast.error("Select a cover image");
+
     setUploading(true);
     const formData = new FormData();
     formData.append("file", coverFile);
+
     try {
       const res = await api.post("/user/upload-cover-image", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
-      setMessage("Cover image uploaded successfully!");
+      toast.success("Cover image uploaded!");
       setUser({ ...user, coverImageUrl: res.data.imageUrl || res.data });
-      setCoverFile(null);
     } catch (err) {
-      setError(err.response?.data?.message || "Upload failed");
+      handleError(err);
     } finally {
       setUploading(false);
     }
   };
 
   return (
-    <div>
+    <div className="settings-container">
+      <ToastContainer />
+
       <h1>Account Settings</h1>
 
-      {message && <p style={{ color: "green" }}>{message}</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <div className="card">
+        <h2>Profile Image</h2>
+        <input type="file" onChange={(e) => setProfileFile(e.target.files[0])} />
+        <button onClick={uploadProfileImage}>Upload</button>
+      </div>
 
-      <h2>Upload Profile Picture</h2>
-      <input type="file" accept="image/*" onChange={(e) => setProfileFile(e.target.files[0])} />
-      <button onClick={uploadProfileImage} disabled={!profileFile || uploading}>
-        Upload
-      </button>
+      <div className="card">
+        <h2>Cover Image</h2>
+        <input type="file" onChange={(e) => setCoverFile(e.target.files[0])} />
+        <button onClick={uploadCoverImage}>Upload</button>
+      </div>
 
-      <h2>Upload Cover Photo</h2>
-      <input type="file" accept="image/*" onChange={(e) => setCoverFile(e.target.files[0])} />
-      <button onClick={uploadCoverImage} disabled={!coverFile || uploading}>
-        Upload
-      </button>
+      <div className="card">
+        <h2>Update Name</h2>
+        <input
+          placeholder="First Name"
+          value={nameForm.name}
+          onChange={(e) =>
+            setNameForm({ ...nameForm, name: e.target.value })
+          }
+        />
+        <input
+          placeholder="Last Name"
+          value={nameForm.lastName}
+          onChange={(e) =>
+            setNameForm({ ...nameForm, lastName: e.target.value })
+          }
+        />
+        <button onClick={updateName}>Save</button>
+      </div>
 
-      <h2>Update Name</h2>
-      <input
-        placeholder="First Name"
-        value={nameForm.name}
-        onChange={(e) => setNameForm({ ...nameForm, name: e.target.value })}
-      />
-      <input
-        placeholder="Last Name"
-        value={nameForm.lastName}
-        onChange={(e) => setNameForm({ ...nameForm, lastName: e.target.value })}
-      />
-      <button onClick={updateName} disabled={loading}>
-        Save Changes
-      </button>
+      <div className="card">
+        <h2>Update Email</h2>
+        <input
+          placeholder="New Email"
+          value={emailForm.newEmail}
+          onChange={(e) =>
+            setEmailForm({ ...emailForm, newEmail: e.target.value })
+          }
+        />
+        <button onClick={requestEmailUpdate}>Request OTP</button>
 
-      <h2>Update Email</h2>
-      <input
-        placeholder="New Email"
-        type="email"
-        value={emailForm.newEmail}
-        onChange={(e) => setEmailForm({ ...emailForm, newEmail: e.target.value })}
-      />
-      <button onClick={requestEmailUpdate} disabled={loading || !emailForm.newEmail}>
-        Request Verification
-      </button>
-      <input
-        placeholder="OTP"
-        value={emailForm.otp}
-        onChange={(e) => setEmailForm({ ...emailForm, otp: e.target.value })}
-      />
-      <button onClick={verifyNewEmail} disabled={!emailForm.otp}>
-        Verify Email
-      </button>
+        <input
+          placeholder="OTP"
+          value={emailForm.otp}
+          onChange={(e) =>
+            setEmailForm({ ...emailForm, otp: e.target.value })
+          }
+        />
+        <button onClick={verifyNewEmail}>Verify</button>
+      </div>
 
-      <h2>Update Password</h2>
-      <input
-        placeholder="Current Password"
-        type={showPassword.current ? "text" : "password"}
-        value={passwordForm.currentPassword}
-        onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-      />
-      <input
-        placeholder="New Password"
-        type={showPassword.new ? "text" : "password"}
-        value={passwordForm.newPassword}
-        onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-      />
-      <input
-        placeholder="Confirm New Password"
-        type={showPassword.confirm ? "text" : "password"}
-        value={passwordForm.confirmPassword}
-        onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-      />
-      <button onClick={updatePassword}>Update Password</button>
+      <div className="card">
+        <h2>Update Password</h2>
+        <input
+          type="password"
+          placeholder="Current Password"
+          onChange={(e) =>
+            setPasswordForm({
+              ...passwordForm,
+              currentPassword: e.target.value,
+            })
+          }
+        />
+        <input
+          type="password"
+          placeholder="New Password"
+          onChange={(e) =>
+            setPasswordForm({
+              ...passwordForm,
+              newPassword: e.target.value,
+            })
+          }
+        />
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          onChange={(e) =>
+            setPasswordForm({
+              ...passwordForm,
+              confirmPassword: e.target.value,
+            })
+          }
+        />
+        <button onClick={updatePassword}>Update</button>
+      </div>
 
-      <h2>Delete Account</h2>
-      <input
-        placeholder="Current Password"
-        type="password"
-        value={deleteForm.currentPassword}
-        onChange={(e) => setDeleteForm({ currentPassword: e.target.value })}
-      />
-      <button onClick={deleteAccount}>Delete Account</button>
+      <div className="card danger">
+        <h2>Delete Account</h2>
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) =>
+            setDeleteForm({ currentPassword: e.target.value })
+          }
+        />
+        <button onClick={deleteAccount}>Delete</button>
+      </div>
     </div>
   );
 }

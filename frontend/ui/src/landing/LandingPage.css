@@ -1,0 +1,368 @@
+/* LandingPage.css */
+
+/* ================= GENERAL ================= */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  scroll-behavior: smooth;
+  background-color: #f8fafc;
+  color: #1e2a3a;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.navbar .logo {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #0077b6;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  font-weight: 500;
+  color: #333;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #0077b6;
+}
+
+.login-btn {
+  background-color: #ffffff;
+  color: #0077b6;
+  border: 1px solid #0077b6;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #0077b6;
+  color: white;
+}
+
+.privacy-btn {
+  background: transparent;
+  color: #333;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.privacy-btn:hover {
+  background-color: rgba(0,119,182,0.1);
+}
+
+/* ================= HERO ================= */
+.hero-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5rem 2rem;
+  background: linear-gradient(145deg, rgba(246,249,252,0.9), rgba(230,240,249,0.9)), 
+              url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.hero-text {
+  flex: 1;
+  min-width: 300px;
+}
+
+.hero-text h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.hero-text h1 span {
+  color: #0077b6;
+}
+
+.hero-text p {
+  margin: 1.5rem 0;
+  max-width: 500px;
+  color: #4a5568;
+}
+
+.get-started-btn {
+  background-color: #0077b6;
+  color: #fff;
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  border: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.get-started-btn:hover {
+  background-color: #005f8c;
+}
+
+.hero-image img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 20px;
+  border: 3px solid rgba(255,255,255,0.5);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* ================= STATS ================= */
+.stats-section {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.stat-box h2 {
+  font-size: 2.5rem;
+  color: #0077b6;
+  margin-bottom: 0.5rem;
+}
+
+.stat-box h6 {
+  font-weight: 500;
+  color: #4a5568;
+}
+
+/* ================= FEATURES ================= */
+.features-section {
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.features-section h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.features-section p {
+  margin-bottom: 3rem;
+  color: #4a5568;
+}
+
+.features-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.feature-card {
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: 2rem;
+  width: 250px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,119,182,0.2);
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ================= TESTIMONIALS ================= */
+.testimonials-section {
+  padding: 5rem 2rem;
+  background-color: #f8fafc;
+  text-align: center;
+}
+
+.reviews-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.review-card {
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(6px);
+  padding: 1.5rem;
+  border-radius: 15px;
+  width: 280px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,119,182,0.15);
+}
+
+.review-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #0077b6;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.8rem;
+  font-weight: 700;
+}
+
+.rating {
+  color: #ffb400;
+  font-size: 0.9rem;
+}
+
+/* ================= FOOTER ================= */
+.footer {
+  background-color: #1e2a3a;
+  color: #fff;
+  padding: 3rem 2rem;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.footer a {
+  color: #fff;
+  margin-right: 1rem;
+}
+
+.footer a:hover {
+  color: #0077b6;
+}
+
+.footer-info {
+  color: #a0aec0;
+}
+
+/* ================= CHAT BUTTON ================= */
+.chat-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #0077b6;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* ================= CHAT DRAWER ================= */
+.chat-drawer {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 350px;
+  height: 100%;
+  background-color: #ffffff;
+  border-left: 1px solid rgba(0,0,0,0.1);
+  padding: 1rem;
+  box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+}
+
+/* ================= PRIVACY MODAL ================= */
+.privacy-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.privacy-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 15px;
+  max-width: 500px;
+  text-align: left;
+}
+
+@media screen and (max-width: 768px) {
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-image img {
+    max-width: 100%;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .features-container, .reviews-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chat-drawer {
+    width: 100%;
+  }
+}

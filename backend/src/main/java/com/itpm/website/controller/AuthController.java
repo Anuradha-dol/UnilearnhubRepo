@@ -3,6 +3,7 @@ package com.itpm.website.controller;
 import com.itpm.website.dtos.UserDto;
 import com.itpm.website.dtos.user.AuthResponse;
 import com.itpm.website.dtos.user.LoginRequest;
+import com.itpm.website.repos.UserRepo;
 import com.itpm.website.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
+    private final UserRepo userRepo;
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody UserDto.RegisterRequest registerRequest,
@@ -93,5 +97,12 @@ public class AuthController {
         }
 
         return ResponseEntity.ok(authService.resendOtp(email));
+    }
+
+    @PostMapping("/check-phone")
+    public ResponseEntity<Map<String, Boolean>> checkPhone(@RequestBody Map<String, String> body) {
+        String phoneNumber = body.get("phoneNumber");
+        boolean available = !userRepo.findByPhoneNumber(phoneNumber).isPresent();
+        return ResponseEntity.ok(Map.of("available", available));
     }
 }
