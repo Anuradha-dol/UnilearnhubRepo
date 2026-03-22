@@ -1,0 +1,223 @@
+.my-post-feed {
+  max-width: 760px;
+  margin: 0 auto;
+  color: #0f2742;
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+}
+
+.feed-title {
+  font-size: clamp(1.45rem, 1.9vw, 1.95rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.new-post-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 1.1rem;
+  background: #ffffff;
+  border: 1px solid #dbe7fb;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.new-post-container textarea {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #ccdbf7;
+  background: #f9fbff;
+  font-size: 0.96rem;
+  resize: vertical;
+  outline: none;
+  min-height: 88px;
+}
+
+.new-post-container textarea:focus {
+  border-color: #2f6fed;
+  box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.16);
+}
+
+.post-input-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.file-picker-label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px dashed #84a9f5;
+  border-radius: 999px;
+  background: #f6f9ff;
+  color: #2556ba;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  max-width: 100%;
+}
+
+.file-picker-label input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.new-post-container button {
+  align-self: flex-end;
+  padding: 8px 18px;
+  border-radius: 20px;
+  background: linear-gradient(120deg, #2f6fed, #4f8cff);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(47, 111, 237, 0.22);
+}
+
+.new-post-container button:hover {
+  filter: brightness(1.03);
+}
+
+.feed-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #d3e0f7, transparent);
+  margin: 14px 0 12px;
+}
+
+.feed-empty-state {
+  text-align: center;
+  color: #5b728a;
+  border: 1px dashed #c6d7f6;
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+.post-card {
+  background-color: #ffffff;
+  border: 1px solid #dbe7fb;
+  border-radius: 16px;
+  padding: 14px 14px 12px;
+  margin-bottom: 14px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+  position: relative;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.post-header strong {
+  font-size: 0.92rem;
+  color: #1f3f6f;
+}
+
+.post-options {
+  position: relative;
+}
+
+.post-options button {
+  background: #f4f7ff;
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #546882;
+}
+
+.post-options button:hover {
+  background: #eaf0ff;
+  color: #1d4eb5;
+}
+
+.post-menu {
+  display: none;
+  position: absolute;
+  top: 38px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #d5e3fa;
+  border-radius: 12px;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.15);
+  min-width: 130px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.post-card.show-menu .post-menu {
+  display: block;
+}
+
+.post-menu button {
+  width: 100%;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 0;
+  background: #ffffff;
+  text-align: left;
+  font-size: 0.88rem;
+  cursor: pointer;
+  color: #173a66;
+  border-bottom: 1px solid #edf2fb;
+}
+
+.post-menu button:last-child {
+  border-bottom: none;
+}
+
+.post-menu button:hover {
+  background-color: #f6f9ff;
+}
+
+.post-content {
+  font-size: 0.94rem;
+  color: #26445f;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.post-content img {
+  max-width: 100%;
+  border-radius: 12px;
+  margin-top: 8px;
+  border: 1px solid #d6e3fa;
+}
+
+.shared-post {
+  border: 1px solid #d7e4fa;
+  padding: 11px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f8fbff, #f0f6ff);
+  margin-top: 8px;
+}
+
+@media (max-width: 640px) {
+  .my-post-feed {
+    max-width: 100%;
+  }
+
+  .new-post-container {
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .post-card {
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .post-header strong {
+    font-size: 0.86rem;
+    max-width: calc(100% - 44px);
+  }
+}
