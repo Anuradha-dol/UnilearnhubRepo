@@ -50,6 +50,10 @@ public class ReactionController {
             @AuthenticationPrincipal User user,
             @PathVariable Long postId) {
 
+        if (user == null) {
+            throw new ResponseStatusException(UNAUTHORIZED, "Please login to remove reaction");
+        }
+
         return ResponseEntity.ok(reactionService.removeReaction(user.getUserId(), postId));
     }
 

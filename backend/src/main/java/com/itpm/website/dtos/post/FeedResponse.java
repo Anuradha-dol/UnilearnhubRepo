@@ -1,9 +1,9 @@
 package com.itpm.website.dtos.post;
 
+import java.time.LocalDateTime;
+
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -16,6 +16,7 @@ public class FeedResponse {
     private String content;
     private String imageUrl;
     private LocalDateTime createdAt;
+    private Long shareCount;
 
     // For SHARE
     private Long originalPostId;

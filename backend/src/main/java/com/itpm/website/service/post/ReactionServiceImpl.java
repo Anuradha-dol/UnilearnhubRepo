@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReactionServiceImpl implements ReactionService {
 
-    private static final Set<String> ALLOWED_TYPES = Set.of("like", "love", "care", "haha", "wow", "sad", "angry");
+    private static final Set<String> ALLOWED_TYPES = Set.of("like", "unlike");
 
     private final ReactionRepository reactionRepository;
     private final UserRepo userRepo;
@@ -66,7 +66,7 @@ public class ReactionServiceImpl implements ReactionService {
         Post post = postRepo.findById(postId).orElseThrow();
 
         Map<String, Long> counts = new HashMap<>();
-        String[] types = {"like", "love", "care", "haha", "wow", "sad", "angry"};
+        String[] types = {"like", "unlike"};
 
         for (String type : types) {
             counts.put(type, reactionRepository.countByPostAndType(post, type));

@@ -57,6 +57,7 @@ public class ShareServiceImpl implements ShareService {
                         .content(post.getContent())
                         .imageUrl(post.getImageUrl())
                         .createdAt(post.getCreatedAt())
+                        .shareCount(shareRepository.countByPost(post))
                         .build())
                 .toList();
 
@@ -68,6 +69,7 @@ public class ShareServiceImpl implements ShareService {
                         .authorName(share.getPost().getAuthorName())
                         .content(share.getPost().getContent())
                         .imageUrl(share.getPost().getImageUrl())
+                        .shareCount(shareRepository.countByPost(share.getPost()))
                         .sharedByName(
                                 share.getUser().getFirstname() + " " +
                                         share.getUser().getLastName()
@@ -106,6 +108,7 @@ public class ShareServiceImpl implements ShareService {
                         .authorName(share.getPost().getAuthorName())
                         .content(share.getPost().getContent())
                         .imageUrl(share.getPost().getImageUrl())
+                        .shareCount(shareRepository.countByPost(share.getPost()))
                         .sharedByName(
                                 share.getUser().getFirstname() + " " +
                                         share.getUser().getLastName()
