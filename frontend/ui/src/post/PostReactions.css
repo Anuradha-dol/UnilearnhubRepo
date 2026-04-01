@@ -1,0 +1,70 @@
+/* PostReactions.css */
+
+.reactions-container {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+  position: relative;
+}
+
+.reaction-counts {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.reaction-counts span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.reaction-button-wrapper {
+  margin-top: 6px;
+  position: relative;
+  display: inline-block;
+}
+
+.reaction-button {
+  font-size: 20px;
+  padding: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.1s;
+}
+
+.reaction-button:hover {
+  transform: scale(1.1);
+}
+
+.reaction-popover {
+  display: flex;
+  position: absolute;
+  top: -64px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  padding: 6px 10px;
+  border-radius: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  z-index: 10;
+  gap: 4px;
+}
+
+.reaction-popover button {
+  font-size: 24px;
+  margin: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.reaction-popover button:hover {
+  transform: scale(1.4);
+}
