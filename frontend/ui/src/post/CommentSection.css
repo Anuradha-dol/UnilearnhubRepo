@@ -1,0 +1,236 @@
+/* CommentSection.css */
+
+/* Container */
+.comment-section {
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: 'Arial', sans-serif;
+  color: #1c1e21;
+}
+
+/* Header */
+.comment-section h4 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* New Comment Input */
+.comment-input-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.comment-input-container input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid #ccd0d5;
+  outline: none;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.comment-input-container input:focus {
+  border-color: #1877f2;
+  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+}
+
+.comment-input-container button {
+  background-color: #1877f2;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.comment-input-container button:hover {
+  background-color: #166fe5;
+}
+
+/* Comment Card */
+.comment-card {
+  margin-top: 10px;
+  padding: 12px 15px;
+  border-radius: 12px;
+  background-color: #f0f2f5;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+.comment-card .comment-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.comment-card .comment-header strong {
+  font-size: 0.95rem;
+}
+
+.comment-card .comment-content {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+
+/* Options menu (three-dot) */
+.comment-options {
+  margin-left: auto;
+  position: relative;
+}
+
+.options-button {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #65676b;
+}
+
+.options-button:hover {
+  color: #1877f2;
+}
+
+.options-menu {
+  display: none;
+  position: absolute;
+  top: 18px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccd0d5;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 100;
+  min-width: 80px;
+}
+
+.options-menu button {
+  width: 100%;
+  padding: 6px 10px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #050505;
+  border-bottom: 1px solid #eee;
+}
+
+.options-menu button:last-child {
+  border-bottom: none;
+}
+
+.options-menu button:hover {
+  background-color: #f0f2f5;
+}
+
+/* Reply Input */
+.reply-input-container {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.reply-input-container input {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 20px;
+  border: 1px solid #ccd0d5;
+  outline: none;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.reply-input-container input:focus {
+  border-color: #1877f2;
+  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+}
+
+.reply-input-container button {
+  background-color: #1877f2;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.reply-input-container button:hover {
+  background-color: #166fe5;
+}
+
+/* Nested Replies */
+.comment-reply {
+  margin-left: 40px;
+  margin-top: 8px;
+  border-left: 2px solid #ddd;
+  padding-left: 10px;
+}
+
+/* Editing Input */
+.comment-edit-input {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 1px solid #ccd0d5;
+  outline: none;
+  font-size: 0.85rem;
+}
+
+/* Save/Cancel Buttons for Editing */
+.edit-buttons {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.edit-buttons button {
+  padding: 4px 12px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.edit-buttons button:first-child {
+  background-color: #42b72a;
+  color: #fff;
+}
+
+.edit-buttons button:first-child:hover {
+  background-color: #36a420;
+}
+
+.edit-buttons button:last-child {
+  background-color: #e4e6eb;
+  color: #050505;
+}
+
+.edit-buttons button:last-child:hover {
+  background-color: #d8dadf;
+}
+
+/* Show menu when active */
+.comment-card.show-menu .options-menu {
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .comment-reply {
+    margin-left: 20px;
+  }
+  .comment-input-container input,
+  .reply-input-container input {
+    font-size: 0.85rem;
+  }
+}
