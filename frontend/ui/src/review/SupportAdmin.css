@@ -4,7 +4,7 @@
 .support-container {
   min-height: 100vh;
   background: linear-gradient(145deg, rgba(240,247,250,0.92) 0%, rgba(230,240,249,0.92) 100%),
-              url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+  url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -20,7 +20,7 @@
 }
 
 .support-header-avatar {
-  background-color: #0077b6;
+  background-color: #b49060;
   width: 56px;
   height: 56px;
   margin-right: 16px;
@@ -33,7 +33,7 @@
 
 .support-header-title {
   font-weight: 800;
-  color: #1e2a3a;
+  color: #2d2926;
   font-size: 2rem;
   margin: 0;
 }
@@ -65,7 +65,7 @@
 .message-bubble {
   padding: 16px;
   max-width: 70%;
-  border: 1px solid rgba(0,119,182,0.1);
+  border: 1px solid rgba(180, 144, 96,0.1);
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
@@ -103,11 +103,11 @@
 
 .user-avatar {
   background-color: #b8d8f0;
-  color: #1e2a3a;
+  color: #2d2926;
 }
 
 .admin-avatar {
-  background-color: #0077b6;
+  background-color: #b49060;
 }
 
 /* User message wrapper */
@@ -147,12 +147,12 @@
 }
 
 .response-input:focus {
-  border-color: #0077b6;
+  border-color: #b49060;
   outline: none;
 }
 
 .send-button {
-  background-color: #0077b6;
+  background-color: #b49060;
   color: #fff;
   border: none;
   padding: 8px;
