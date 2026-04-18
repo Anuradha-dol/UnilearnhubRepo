@@ -25,6 +25,14 @@ public interface ShareRepository extends JpaRepository<Share, Long> {
 
     List<Share> findByUserOrderByCreatedAtDesc(User user);
 
+    @Query("""
+            SELECT s.post.postId, COUNT(s)
+            FROM Share s
+            WHERE s.post.postId IN :postIds
+            GROUP BY s.post.postId
+            """)
+    List<Object[]> countSharesByPostIds(@Param("postIds") List<Long> postIds);
+
     @Transactional
     @Modifying
     @Query("DELETE FROM Share s WHERE s.user.userId = :userId")

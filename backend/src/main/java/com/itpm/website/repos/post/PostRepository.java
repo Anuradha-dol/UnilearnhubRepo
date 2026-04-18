@@ -2,6 +2,7 @@ package com.itpm.website.repos.post;
 
 import com.itpm.website.enities.User;
 import com.itpm.website.enities.post.Post;
+import com.itpm.website.dtos.user.Interest;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,6 +19,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByUser_UserIdInOrderByCreatedAtDesc(Set<Long> userIds);
 
     List<Post> findByUser(User user);
+
+    List<Post> findTop25ByLearningPreferenceAndUser_UserIdNotOrderByCreatedAtDesc(Interest learningPreference, Long excludedUserId);
 
     @Transactional
     @Modifying

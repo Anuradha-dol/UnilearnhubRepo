@@ -54,6 +54,7 @@ public class PostServiceImpl implements PostService {
         Post post = Post.builder()
                 .user(user)
                 .content(content)
+                .learningPreference(user.getInterest())
                 .imageUrl(imageUrl)
                 .createdAt(LocalDateTime.now())
                 .build();
