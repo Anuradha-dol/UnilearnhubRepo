@@ -11,45 +11,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "chat_conversations")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SupportQuestion {
+public class ChatConversation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    @Column(nullable = false, length = 20)
+    private String type;
 
-    private String username;
+    @Column(length = 20)
+    private String status = "ACTIVE";
 
-    private String email;
+    private Long ownerUserId;
 
-    @Column(length = 1000)
-    private String question;
+    private Long participantOneId;
 
-    @Column(length = 1000)
-    private String adminResponse;
-
-    private String status = "OPEN"; // OPEN, ANSWERED, CLOSED
+    private Long participantTwoId;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "supportQuestion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("createdAt ASC, id ASC")
-    private List<SupportMessage> messages = new ArrayList<>();
+    private List<ChatMessage> messages = new ArrayList<>();
 
-    public void addMessage(SupportMessage message) {
-        message.setSupportQuestion(this);
+    public void addMessage(ChatMessage message) {
+        message.setConversation(this);
         messages.add(message);
     }
 
-    public void removeMessage(SupportMessage message) {
+    public void removeMessage(ChatMessage message) {
         messages.remove(message);
-        message.setSupportQuestion(null);
+        message.setConversation(null);
     }
 }
+

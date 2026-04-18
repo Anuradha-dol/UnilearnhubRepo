@@ -1,15 +1,19 @@
 package com.itpm.website.controller.problemsreview;
 
-import com.itpm.website.dtos.problemsreview.SupportResponseDto;
+import com.itpm.website.dtos.problemsreview.*;
 import com.itpm.website.enities.User;
+import com.itpm.website.enities.problemsreview.ChatConversation;
 import com.itpm.website.enities.problemsreview.SupportQuestion;
 import com.itpm.website.service.problemsreview.SupportService;
+import com.itpm.website.websocket.SupportWebSocketHandler;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,52 +23,78 @@ import java.util.List;
 public class SupportController {
 
     private final SupportService supportService;
+    private final SupportWebSocketHandler supportWebSocketHandler;
 
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @GetMapping("/bootstrap")
+    public ResponseEntity<ChatBootstrapDto> bootstrap(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(supportService.getBootstrap(user));
+    }
 
-    @PreAuthorize("hasRole('USER')")
-    @PostMapping
-    public ResponseEntity<SupportQuestion> createQuestion(
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @GetMapping("/contacts")
+    public ResponseEntity<List<ChatContactDto>> searchContacts(
             @AuthenticationPrincipal User user,
-            @RequestBody SupportQuestion question) {
+            @RequestParam(value = "firstname", required = false) String firstname) {
 
-        question.setUserId(user.getUserId());
-        question.setUsername(user.getFirstname() + " " + user.getLastName());
-        question.setStatus("OPEN");
-        return ResponseEntity.ok(supportService.createQuestion(question));
+        return ResponseEntity.ok(supportService.searchContacts(user, firstname));
     }
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/my")
-    public ResponseEntity<List<SupportQuestion>> getMyQuestions(
-            @AuthenticationPrincipal User user) {
-
-        return ResponseEntity.ok(supportService.getUserQuestions(user.getUserId()));
+    @PostMapping("/support-conversations")
+    public ResponseEntity<ChatConversationDto> createSupportConversation(@AuthenticationPrincipal User user) {
+        ChatConversation conversation = supportService.createOrGetSupportConversation(user);
+        supportWebSocketHandler.broadcastConversationUpdate(conversation);
+        return ResponseEntity.ok(supportService.toConversationDto(conversation, user));
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteQuestion(
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PostMapping("/direct-conversations")
+    public ResponseEntity<ChatConversationDto> createDirectConversation(
             @AuthenticationPrincipal User user,
-            @PathVariable Long id) {
+            @Valid @RequestBody StartDirectConversationDto dto) {
 
-        supportService.deleteQuestion(id, user.getUserId());
-        return ResponseEntity.ok("Deleted successfully");
+        ChatConversation conversation = supportService.createOrGetDirectConversation(user, dto.recipientId());
+        supportWebSocketHandler.broadcastConversationUpdate(conversation);
+        return ResponseEntity.ok(supportService.toConversationDto(conversation, user));
     }
 
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping
-    public ResponseEntity<List<SupportQuestion>> getAllQuestions() {
-        return ResponseEntity.ok(supportService.getAllQuestions());
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}/respond")
-    public ResponseEntity<SupportQuestion> respond(
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PostMapping(value = "/conversations/{id}/messages", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ChatConversationDto> sendMessage(
+            @AuthenticationPrincipal User user,
             @PathVariable Long id,
-            @Valid @RequestBody SupportResponseDto dto) {
+            @RequestParam(value = "content", required = false) String content,
+            @RequestParam(value = "attachment", required = false) MultipartFile attachment) {
 
-        return ResponseEntity.ok(supportService.respondToQuestion(id, dto.response()));
+        ChatConversation conversation = supportService.sendMessage(id, user, content, attachment);
+        supportWebSocketHandler.broadcastConversationUpdate(conversation);
+        return ResponseEntity.ok(supportService.toConversationDto(conversation, user));
+    }
+
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PutMapping("/conversations/{id}/messages/{messageId}")
+    public ResponseEntity<ChatConversationDto> updateMessage(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long id,
+            @PathVariable Long messageId,
+            @Valid @RequestBody UpdateChatMessageDto dto) {
+
+        ChatConversation conversation = supportService.updateMessage(id, messageId, user, dto.content());
+        supportWebSocketHandler.broadcastConversationUpdate(conversation);
+        return ResponseEntity.ok(supportService.toConversationDto(conversation, user));
+    }
+
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @DeleteMapping("/conversations/{id}/messages/{messageId}")
+    public ResponseEntity<ChatConversationDto> deleteMessage(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long id,
+            @PathVariable Long messageId) {
+
+        ChatConversation conversation = supportService.deleteMessage(id, messageId, user);
+        supportWebSocketHandler.broadcastConversationUpdate(conversation);
+        return ResponseEntity.ok(supportService.toConversationDto(conversation, user));
     }
 }
 

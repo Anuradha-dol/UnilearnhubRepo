@@ -46,7 +46,7 @@ export default function Signup() {
         try {
           const res = await api.post("/auth/check-email", { email: form.email });
           if (!res.data.available) newErrors.email = "This email is already registered";
-        } catch {}
+        } catch {/*ss*/}
       }
     }
 
@@ -56,6 +56,15 @@ export default function Signup() {
 
       if (!form.password.trim()) newErrors.password = "Password cannot be empty";
       else if (form.password.length < 6) newErrors.password = "Password must be at least 6 characters";
+
+      <input
+  type="text"
+  value={form.phoneNumber}
+  onChange={(e) => {
+    const value = e.target.value.replace(/\D/g, ""); // remove non-digits
+    setForm({ ...form, phoneNumber: value });
+  }}
+/>
 
       if (/^\d{10}$/.test(form.phoneNumber)) {
         try {
