@@ -1,6 +1,5 @@
 package com.itpm.website.controller.problemsreview;
 
-import com.itpm.website.dtos.problemsreview.SupportResponseDto;
 import com.itpm.website.enities.User;
 import com.itpm.website.enities.problemsreview.SupportQuestion;
 import com.itpm.website.service.problemsreview.SupportService;
