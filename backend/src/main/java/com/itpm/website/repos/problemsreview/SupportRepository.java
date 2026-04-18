@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface SupportRepository extends JpaRepository<SupportQuestion, Long> {
 
-    List<SupportQuestion> findByUserId(Long userId);
+    List<SupportQuestion> findByUserIdOrderByUpdatedAtDesc(Long userId);
+
+    List<SupportQuestion> findAllByOrderByUpdatedAtDesc();
 }
 

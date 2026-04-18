@@ -4,7 +4,7 @@
 .review-container {
   min-height: 100vh;
   background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)),
-              url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+  url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
   background-size: cover;
   background-position: center;
   padding: 32px 16px;
@@ -14,7 +14,7 @@
 /* Header */
 .review-header {
   text-align: center;
-  color: #1e2a3a;
+  color: #2d2926;
   margin-bottom: 24px;
 }
 
@@ -50,7 +50,7 @@
 
 .review-textarea:focus {
   outline: none;
-  border-color: #0077b6;
+  border-color: #b49060;
 }
 
 /* Rating & Status */
@@ -71,7 +71,7 @@
 
 .review-select:focus {
   outline: none;
-  border-color: #0077b6;
+  border-color: #b49060;
 }
 
 /* Form buttons */
@@ -89,7 +89,7 @@
 }
 
 .review-submit {
-  background-color: #0077b6;
+  background-color: #b49060;
 }
 
 .review-cancel {
@@ -122,7 +122,7 @@
 .review-avatar {
   width: 40px;
   height: 40px;
-  background-color: #0077b6;
+  background-color: #b49060;
   color: #fff;
   border-radius: 50%;
   display: flex;
@@ -182,7 +182,7 @@
 }
 
 .review-edit {
-  background-color: #0077b6;
+  background-color: #b49060;
   color: #fff;
 }
 

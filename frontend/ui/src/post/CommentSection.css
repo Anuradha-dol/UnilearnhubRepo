@@ -4,15 +4,17 @@
 .comment-section {
   max-width: 600px;
   margin: 0 auto;
-  font-family: 'Arial', sans-serif;
-  color: #1c1e21;
+  font-family: "Outfit", "Segoe UI", sans-serif;
+  color: #2d2926;
 }
 
 /* Header */
 .comment-section h4 {
   margin-bottom: 1rem;
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #2d2926;
 }
 
 /* New Comment Input */
@@ -24,42 +26,49 @@
 
 .comment-input-container input {
   flex: 1;
-  padding: 8px 12px;
+  padding: 9px 12px;
   border-radius: 20px;
-  border: 1px solid #ccd0d5;
+  border: 1px solid rgba(180, 144, 96, 0.3);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
   outline: none;
   font-size: 0.95rem;
   transition: all 0.2s;
+  color: #2d2926;
 }
 
 .comment-input-container input:focus {
-  border-color: #1877f2;
-  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+  border-color: #b49060;
+  box-shadow: 0 0 0 3px rgba(180, 144, 96, 0.15);
 }
 
 .comment-input-container button {
-  background-color: #1877f2;
+  background: linear-gradient(120deg, #b49060, #876d47);
   color: #fff;
   border: none;
   border-radius: 20px;
-  padding: 6px 16px;
+  padding: 8px 18px;
   font-weight: 600;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(180, 144, 96, 0.25);
 }
 
 .comment-input-container button:hover {
-  background-color: #166fe5;
+  filter: brightness(1.05);
+  box-shadow: 0 6px 16px rgba(180, 144, 96, 0.35);
 }
 
 /* Comment Card */
 .comment-card {
   margin-top: 10px;
   padding: 12px 15px;
-  border-radius: 12px;
-  background-color: #f0f2f5;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(232, 228, 219, 0.8);
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.9), rgba(252, 251, 249, 0.95));
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 20px rgba(45, 41, 38, 0.05);
   position: relative;
 }
 
@@ -72,11 +81,13 @@
 
 .comment-card .comment-header strong {
   font-size: 0.95rem;
+  color: #2d2926;
 }
 
 .comment-card .comment-content {
   font-size: 0.95rem;
   margin-bottom: 6px;
+  color: #5c544d;
 }
 
 /* Options menu (three-dot) */
@@ -86,15 +97,19 @@
 }
 
 .options-button {
-  background: none;
-  border: none;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(232, 228, 219, 0.9);
+  border-radius: 10px;
   font-size: 1.1rem;
+  width: 34px;
+  height: 34px;
   cursor: pointer;
-  color: #65676b;
+  color: #827a71;
 }
 
 .options-button:hover {
-  color: #1877f2;
+  color: #b49060;
+  background: rgba(252, 251, 249, 0.95);
 }
 
 .options-menu {
@@ -102,10 +117,11 @@
   position: absolute;
   top: 18px;
   right: 0;
-  background: #fff;
-  border: 1px solid #ccd0d5;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(232, 228, 219, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(45, 41, 38, 0.1);
+  backdrop-filter: blur(12px);
   z-index: 100;
   min-width: 80px;
 }
@@ -118,8 +134,8 @@
   text-align: left;
   font-size: 0.8rem;
   cursor: pointer;
-  color: #050505;
-  border-bottom: 1px solid #eee;
+  color: #2d2926;
+  border-bottom: 1px solid #f1efe9;
 }
 
 .options-menu button:last-child {
@@ -127,7 +143,8 @@
 }
 
 .options-menu button:hover {
-  background-color: #f0f2f5;
+  background-color: rgba(250, 245, 235, 0.85);
+  color: #b49060;
 }
 
 /* Reply Input */
@@ -141,37 +158,61 @@
   flex: 1;
   padding: 6px 10px;
   border-radius: 20px;
-  border: 1px solid #ccd0d5;
+  border: 1px solid rgba(180, 144, 96, 0.3);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
   outline: none;
   font-size: 0.85rem;
   transition: all 0.2s;
+  color: #2d2926;
 }
 
 .reply-input-container input:focus {
-  border-color: #1877f2;
-  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+  border-color: #b49060;
+  box-shadow: 0 0 0 3px rgba(180, 144, 96, 0.15);
 }
 
 .reply-input-container button {
-  background-color: #1877f2;
+  background: linear-gradient(120deg, #b49060, #876d47);
   color: #fff;
   border: none;
   border-radius: 20px;
-  padding: 4px 12px;
+  padding: 5px 14px;
   font-weight: 600;
   cursor: pointer;
   font-size: 0.75rem;
 }
 
 .reply-input-container button:hover {
-  background-color: #166fe5;
+  filter: brightness(1.05);
+}
+
+.comment-actions {
+  margin-top: 8px;
+}
+
+.comment-actions button {
+  border: 1px solid rgba(180, 144, 96, 0.4);
+  background: rgba(252, 251, 249, 0.82);
+  color: #876d47;
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.comment-actions button:hover {
+  background: rgba(250, 245, 235, 0.95);
+  transform: translateY(-1px);
 }
 
 /* Nested Replies */
 .comment-reply {
   margin-left: 40px;
   margin-top: 8px;
-  border-left: 2px solid #ddd;
+  border-left: 2px solid rgba(180, 144, 96, 0.3);
   padding-left: 10px;
 }
 
@@ -180,9 +221,11 @@
   flex: 1;
   padding: 6px 10px;
   border-radius: 12px;
-  border: 1px solid #ccd0d5;
+  border: 1px solid rgba(180, 144, 96, 0.3);
+  background: rgba(255, 255, 255, 0.9);
   outline: none;
   font-size: 0.85rem;
+  color: #2d2926;
 }
 
 /* Save/Cancel Buttons for Editing */
@@ -202,21 +245,43 @@
 }
 
 .edit-buttons button:first-child {
-  background-color: #42b72a;
+  background: linear-gradient(120deg, #b49060, #876d47);
   color: #fff;
 }
 
 .edit-buttons button:first-child:hover {
-  background-color: #36a420;
+  filter: brightness(1.05);
 }
 
 .edit-buttons button:last-child {
-  background-color: #e4e6eb;
-  color: #050505;
+  background-color: #f1efe9;
+  color: #5c544d;
 }
 
 .edit-buttons button:last-child:hover {
-  background-color: #d8dadf;
+  background-color: #e8e4db;
+}
+
+.comment-input-container input[type="file"],
+.reply-input-container input[type="file"] {
+  max-width: 260px;
+  border-radius: 12px;
+  border: 1px dashed rgba(180, 144, 96, 0.5);
+  background: rgba(252, 251, 249, 0.8);
+  color: #876d47;
+  padding: 6px;
+}
+
+.comment-input-container input[type="file"]::file-selector-button,
+.reply-input-container input[type="file"]::file-selector-button {
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(120deg, #b49060, #876d47);
+  color: #fff;
+  font-weight: 600;
+  padding: 6px 10px;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 /* Show menu when active */

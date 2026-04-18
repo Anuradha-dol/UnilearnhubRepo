@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,8 +33,8 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration crf = new CorsConfiguration();
-                    crf.setAllowedOrigins(List.of("http://localhost:5173"));
-                    crf.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    crf.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*"));
+                    crf.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"));
                     crf.setAllowedHeaders(List.of("*"));
                     crf.setAllowCredentials(true);
                     crf.setMaxAge(3600L);
@@ -41,16 +42,18 @@ public class SecurityConfig {
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(
                                 "/auth/**",
                                 "/forgotpass/**",
-                                "/user/**",
-                                "/admin/**",
-                                "/posts/**","/comments/**","/shares/**","/reactions/**","/quizzes/**","/reviews/**","/support/**"
+                                "/posts/**","/comments/**","/shares/**","/reactions/**","/reviews/**","/support/**","/ws/**","/api/chat"
                         ).permitAll()
+                        .requestMatchers("/quizzes/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/quizzes/create", "/quizzes/update/**", "/quizzes/delete/**").hasRole("ADMIN")
+                        .requestMatchers("/quizzes/**").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasRole("USER")
-
+                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/tasks/**").hasAnyRole("USER", "ADMIN")
 
                         .anyRequest().authenticated()
                 )

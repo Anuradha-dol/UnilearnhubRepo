@@ -2,7 +2,8 @@ package com.itpm.website.enities;
 
 import com.itpm.website.dtos.user.Interest;
 import com.itpm.website.dtos.user.Role;
-
+import com.itpm.website.enities.task.MainTask;
+import com.itpm.website.enities.task.Notifications;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -82,6 +83,14 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(length = 50, nullable = false)
     private Interest interest;
+
+    // Tasks cascade
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MainTask> tasks = new ArrayList<>();
+
+    // Notifications cascade
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notifications> notifications = new ArrayList<>();
 
 
 

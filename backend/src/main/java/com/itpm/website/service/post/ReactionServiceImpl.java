@@ -42,7 +42,7 @@ public class ReactionServiceImpl implements ReactionService {
         Reaction reaction = Reaction.builder()
                 .user(user)
                 .post(post)
-            .type(normalizedType)
+                .type(normalizedType)
                 .build();
 
         reactionRepository.save(reaction);
