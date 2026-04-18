@@ -1,0 +1,44 @@
+(a)
+EXPLAIN PLAN FOR
+SELECT c.clno, c.name
+FROM client c, purch p
+WHERE c.clno = p.clno AND p.qty > 1000;
+
+(b)
+Query Plan Explanation (Before Indexes)
+
+SELECT STATEMENT
+Final result of the query.
+
+NESTED LOOPS
+   Joins purch and client tables.
+
+TABLE ACCESS FULL (PURCH)
+Full table scan because no index on qty.
+
+INDEX UNIQUE SCAN (CLIENT PK)
+Uses primary key index on client.clno.
+
+TABLE ACCESS BY ROWID (CLIENT)
+Fetches actual rows from client.
+
+(c)
+CREATE INDEX idx_purch_qty_clno ON purch(qty, clno);
+CREATE INDEX idx_client_clno_name ON client(clno, name);
+
+(d)
+Query Plan Explanation (After Indexes)
+
+SELECT STATEMENT
+Final output.
+
+NESTED LOOPS
+Join operation remains the same.
+
+INDEX RANGE SCAN (idx_purch_qty_clno)
+Used to filter qty > 1000 efficiently.
+
+TABLE ACCESS BY ROWID (CLIENT)
+Retrieves matching client rows.
+
+
