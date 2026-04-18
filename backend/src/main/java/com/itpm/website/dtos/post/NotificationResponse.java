@@ -1,10 +1,7 @@
 package com.itpm.website.dtos.post;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.itpm.website.dtos.user.Interest;
-
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,13 +13,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostResponse {
+public class NotificationResponse {
+    private Long notificationId;
+    private String message;
     private Long postId;
-    private String content;
-    private String imageUrl;
     private Interest learningPreference;
     private String authorName;
+    private Boolean isRead;
     private LocalDateTime createdAt;
-    private List<String> hashtags;
-    private List<CommentResponse> comments; // all comments including replies
 }
