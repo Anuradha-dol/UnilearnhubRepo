@@ -1,5 +1,4 @@
 import SupportChatPage from "./SupportChatPage";
 
-export default function SupportUser() {
-  return <SupportChatPage mode="user" />;
-}
+// This keeps the shared chat page in user mode.
+export default function SupportUser() { return <SupportChatPage mode="user" />; }

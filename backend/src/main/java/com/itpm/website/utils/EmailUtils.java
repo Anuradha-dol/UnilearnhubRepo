@@ -22,7 +22,7 @@ public class EmailUtils {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
         helper.setTo(mailBody.to());
-        helper.setFrom("anuradhawork123@gmail.com");
+        helper.setFrom("anuradha123dk@gmail.com");
         helper.setSubject(mailBody.subject());
         helper.setText(mailBody.text(), true); // Set to true for HTML content
 

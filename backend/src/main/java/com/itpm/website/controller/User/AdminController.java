@@ -19,6 +19,11 @@ public class AdminController {
 
     private final UserProfileService userProfileService;
 
+    @GetMapping("/me")
+    public ResponseEntity<UserDto.UserProfileDto> getAdminProfile(@AuthenticationPrincipal User loggedUser) {
+        return ResponseEntity.ok(userProfileService.getProfile(loggedUser.getUserId()));
+    }
+
     @GetMapping("/dashboard")
     public ResponseEntity<UserDto.UserHomeDto> getAdminHome(@AuthenticationPrincipal User loggedUser) {
         // loggedUser is automatically injected by Spring Security

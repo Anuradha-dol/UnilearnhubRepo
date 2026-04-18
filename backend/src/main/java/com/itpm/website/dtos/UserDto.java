@@ -15,7 +15,6 @@ public class UserDto {
                                   @NotBlank(message = "email is required")
                                   @Email(message = "please provide valid email! ")
                                   String email,
-                                  @NotBlank(message = "tempEmail is required")
                                   String tempEmail,
                                   @NotBlank(message = "phonenumber is required")
                                   String phoneNumber,
@@ -107,36 +106,3 @@ public class UserDto {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
