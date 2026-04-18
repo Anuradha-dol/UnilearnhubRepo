@@ -8,4 +8,3 @@ public record ChatAttachmentDto(
         Long size
 ) {
 }
-

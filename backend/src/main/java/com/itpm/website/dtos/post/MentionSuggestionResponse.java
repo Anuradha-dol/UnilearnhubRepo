@@ -12,3 +12,4 @@ public class MentionSuggestionResponse {
     private String displayName;
     private String email;
 }
+

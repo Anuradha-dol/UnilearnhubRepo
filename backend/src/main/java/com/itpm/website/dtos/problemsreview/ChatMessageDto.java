@@ -17,4 +17,3 @@ public record ChatMessageDto(
         boolean deletable
 ) {
 }
-

@@ -6,3 +6,4 @@ public enum Token {
     REFRESH,
     VERIFY;
 }
+

@@ -22,10 +22,12 @@ export default function Review() {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Load the user's review list when the page opens.
   useEffect(() => {
     fetchMyReviews();
   }, []);
 
+  // Get the current user's reviews from the server.
   const fetchMyReviews = async () => {
     try {
       const res = await api.get("/reviews/gets", { withCredentials: true });
@@ -37,6 +39,7 @@ export default function Review() {
     }
   };
 
+  // Save a new review, or update the one the user is editing.
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!comment.trim()) return setError("Comment cannot be empty");
@@ -56,6 +59,7 @@ export default function Review() {
     }
   };
 
+  // Remove one review after the user confirms it.
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this review?")) return;
     try {
@@ -66,6 +70,7 @@ export default function Review() {
     }
   };
 
+  // Put the selected review back into the form for editing.
   const handleEdit = (review) => {
     setEditingId(review.id);
     setComment(review.comment);
@@ -74,6 +79,7 @@ export default function Review() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Reset the form after save or cancel.
   const resetForm = () => {
     setEditingId(null);
     setComment("");
