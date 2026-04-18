@@ -1,5 +1,114 @@
 @import "tailwindcss";
 
+
+:root {
+	--theme-brown-950: #4b2d18;
+	--theme-brown-900: #5f3920;
+	--theme-brown-800: #73462a;
+	--theme-brown-700: #8c5b38;
+	--theme-brown-500: #b49060;
+	--theme-brown-glass-start: rgba(194, 160, 118, 0.8);
+	--theme-brown-glass-mid: rgba(167, 126, 82, 0.86);
+	--theme-brown-glass-end: rgba(132, 91, 58, 0.82);
+	--theme-nav-brown: rgba(158, 120, 82, 0.84);
+	--theme-nav-pill: rgba(108, 73, 46, 0.18);
+	--theme-nav-border: rgba(255, 248, 239, 0.24);
+	--theme-ivory-100: #fff8ef;
+	--theme-ivory-200: #f6ecdf;
+	--theme-copy-900: #2d2926;
+}
+
+.chip-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	border-radius: 999px;
+	background: linear-gradient(160deg, rgba(252, 251, 249, 0.78) 0%, rgba(241, 239, 233, 0.68) 100%);
+	color: #5c544d;
+	font-weight: 600;
+	cursor: pointer;
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.96),
+		inset 0 -6px 12px rgba(180, 144, 96, 0.12),
+		0 8px 16px rgba(45, 41, 38, 0.06);
+	transition: transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+}
+
+.chip-btn:hover {
+	color: #b49060;
+	transform: translateY(-1px) scale(1.01);
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.96),
+		inset 0 -6px 12px rgba(180, 144, 96, 0.18),
+		0 10px 18px rgba(135, 109, 71, 0.12);
+}
+
+.chip-btn:disabled {
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
+.chip-btn-small {
+	padding: 5px 8px;
+	font-size: 10px;
+	line-height: 1;
+}
+
+.chip-btn-compact {
+	padding: 8px 12px;
+	font-size: 12px;
+	line-height: 1;
+}
+
+.chip-btn-regular {
+	padding: 7px 14px;
+	font-size: 14px;
+	line-height: 1;
+}
+
+.chip-btn-wide {
+	width: 100%;
+	justify-content: flex-start;
+	border-radius: 12px;
+}
+
+.chip-image-frame {
+	overflow: hidden;
+	border-radius: 16px;
+	padding: 10px;
+	background: rgba(255, 255, 255, 0.95);
+	border: 1px solid rgba(232, 228, 219, 0.9);
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.98),
+		0 6px 14px rgba(45, 41, 38, 0.05);
+}
+
+.chip-file-input::file-selector-button {
+	border: none;
+	border-radius: 999px;
+	background: linear-gradient(160deg, rgba(252, 251, 249, 0.78) 0%, rgba(241, 239, 233, 0.68) 100%);
+	color: #5c544d;
+	font-weight: 600;
+	padding: 6px 10px;
+	margin-right: 8px;
+	cursor: pointer;
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.96),
+		inset 0 -6px 12px rgba(180, 144, 96, 0.12),
+		0 8px 16px rgba(45, 41, 38, 0.06);
+}
+
+.post-image-safe {
+	filter: none !important;
+	-webkit-filter: none !important;
+	mix-blend-mode: normal !important;
+	opacity: 1 !important;
+	image-rendering: auto !important;
+	color-rendering: optimizeQuality;
+	backface-visibility: hidden;
+	transform: translateZ(0);
+	contain: paint;
 :root {
     --theme-brown-950: #4b2d18;
     --theme-brown-900: #5f3920;

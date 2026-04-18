@@ -2,7 +2,9 @@ package com.itpm.website.repos.post;
 
 import com.itpm.website.enities.User;
 import com.itpm.website.enities.post.Post;
+import com.itpm.website.dtos.user.Interest;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +20,16 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByUser_UserIdInOrderByCreatedAtDesc(Set<Long> userIds);
 
     List<Post> findByUser(User user);
+
+    List<Post> findByUserOrderByCreatedAtDesc(User user);
+
+    List<Post> findByUserOrderByCreatedAtDesc(User user, Pageable pageable);
+
+    List<Post> findAllByOrderByCreatedAtDesc();
+
+    List<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    List<Post> findTop25ByLearningPreferenceAndUser_UserIdNotOrderByCreatedAtDesc(Interest learningPreference, Long userId);
 
     @Transactional
     @Modifying

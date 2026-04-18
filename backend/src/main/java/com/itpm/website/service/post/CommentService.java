@@ -12,6 +12,7 @@ public interface CommentService {
     Comment addReply(Long userId, Long postId, Long parentCommentId, String content, MultipartFile attachment);
     void deleteComment(Long commentId);
     List<Comment> getCommentsByPost(Long postId);
+    List<Comment> getCommentsByPost(Long postId, Integer limit);
     Long countCommentsByPost(Long postId);
     Optional<Comment> getCommentById(Long commentId);
 
