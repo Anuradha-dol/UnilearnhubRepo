@@ -1,70 +1,65 @@
 /* PostReactions.css */
 
 .reactions-container {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  font-family: Arial, sans-serif;
-  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-family: "Outfit", "Segoe UI", sans-serif;
 }
 
 .reaction-counts {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   font-size: 0.9rem;
-  color: #555;
+  color: #827a71;
 }
 
-.reaction-counts span {
+.reaction-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(160deg, rgba(252, 251, 249, 0.78) 0%, rgba(241, 239, 233, 0.68) 100%);
+  color: #5c544d;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.96),
+          inset 0 -6px 12px rgba(180, 144, 96, 0.12),
+          0 8px 16px rgba(45, 41, 38, 0.05);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+}
+
+.reaction-chip:hover {
+  color: #b49060;
+  transform: translateY(-1px) scale(1.01);
+  box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.96),
+          inset 0 -6px 12px rgba(180, 144, 96, 0.18),
+          0 10px 18px rgba(135, 109, 71, 0.12);
+}
+
+.reaction-chip.active {
+  border: none;
+  background: linear-gradient(160deg, rgba(239, 238, 221, 0.95) 0%, rgba(225, 219, 194, 0.86) 100%);
+  color: #876d47;
+  box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.8),
+          inset 0 -7px 13px rgba(135, 109, 71, 0.20),
+          0 12px 20px rgba(135, 109, 71, 0.15);
+}
+
+.reaction-chip span {
   display: flex;
   align-items: center;
-  gap: 4px;
+  line-height: 1;
 }
 
-.reaction-button-wrapper {
-  margin-top: 6px;
-  position: relative;
-  display: inline-block;
-}
-
-.reaction-button {
-  font-size: 20px;
-  padding: 6px;
-  border: none;
-  cursor: pointer;
-  background-color: #fff;
-  border-radius: 50%;
-  transition: transform 0.1s;
-}
-
-.reaction-button:hover {
-  transform: scale(1.1);
-}
-
-.reaction-popover {
-  display: flex;
-  position: absolute;
-  top: -64px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #fff;
-  padding: 6px 10px;
-  border-radius: 30px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  z-index: 10;
-  gap: 4px;
-}
-
-.reaction-popover button {
-  font-size: 24px;
-  margin: 0;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  transition: transform 0.15s;
-}
-
-.reaction-popover button:hover {
-  transform: scale(1.4);
+.reaction-count-icon {
+  width: 15px;
+  height: 15px;
+  color: currentColor;
 }

@@ -1,15 +1,61 @@
+/* MyPostFeed.css - Organic Earth Theme */
 .my-post-feed {
+  position: relative;
   max-width: 760px;
   margin: 0 auto;
-  color: #0f2742;
-  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  padding: 10px 12px 14px;
+  border-radius: 22px;
+  color: #2d2926;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  background:
+          radial-gradient(circle at 12% 12%, rgba(180, 144, 96, 0.15), transparent 34%),
+          radial-gradient(circle at 88% 88%, rgba(126, 105, 80, 0.14), transparent 36%),
+          linear-gradient(160deg, rgba(255, 255, 255, 0.58), rgba(247, 239, 226, 0.46));
+  border: 1px solid rgba(232, 228, 219, 0.85);
+  box-shadow: 0 16px 28px -18px rgba(45, 41, 38, 0.34);
+}
+
+.my-post-feed::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.14;
+  border-radius: inherit;
+  background-image: radial-gradient(rgba(110, 91, 66, 0.24) 0.6px, transparent 0.6px);
+  background-size: 3px 3px;
+}
+
+.my-post-feed > * {
+  position: relative;
+  z-index: 1;
 }
 
 .feed-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   font-size: clamp(1.45rem, 1.9vw, 1.95rem);
   font-weight: 800;
   letter-spacing: -0.02em;
-  margin-bottom: 1rem;
+  margin-bottom: 1.05rem;
+  color: #2d2926;
+}
+
+.my-post-feed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.feed-title::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(140deg, #b49060, #876d47);
+  box-shadow: 0 0 0 4px rgba(180, 144, 96, 0.16);
 }
 
 .new-post-container {
@@ -17,32 +63,48 @@
   flex-direction: column;
   gap: 12px;
   margin-bottom: 1.1rem;
-  background: #ffffff;
-  border: 1px solid #dbe7fb;
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(250, 243, 232, 0.86));
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(232, 228, 219, 1);
+  box-shadow: 0 8px 16px rgba(45, 41, 38, 0.03);
   border-radius: 18px;
   padding: 14px;
 }
 
-.new-post-container textarea {
+.new-post-container textarea, .new-post-container select {
   padding: 10px 12px;
   border-radius: 12px;
-  border: 1px solid #ccdbf7;
-  background: #f9fbff;
+  border: 1px solid rgba(232, 228, 219, 0.8);
+  background: #fcfbf9;
+  color: #2d2926;
   font-size: 0.96rem;
   resize: vertical;
   outline: none;
   min-height: 88px;
+  transition: all 0.2s ease;
 }
 
-.new-post-container textarea:focus {
-  border-color: #2f6fed;
-  box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.16);
+.new-post-container select {
+  min-height: auto;
+  margin-right: 12px;
+}
+
+.new-post-container textarea:focus, .new-post-container select:focus {
+  border-color: #b49060;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(180, 144, 96, 0.16);
+}
+
+.new-post-container textarea::placeholder {
+  color: #a39c93;
 }
 
 .post-input-row {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .file-picker-label {
@@ -50,13 +112,20 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  border: 1px dashed #84a9f5;
+  border: 1px dashed rgba(180, 144, 96, 0.6);
   border-radius: 999px;
-  background: #f6f9ff;
-  color: #2556ba;
+  background: rgba(250, 245, 235, 0.8);
+  color: #b49060;
   padding: 8px 12px;
   font-size: 0.9rem;
   max-width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.file-picker-label:hover {
+  background: rgba(239, 233, 221, 1);
 }
 
 .file-picker-label input[type="file"] {
@@ -66,45 +135,57 @@
   cursor: pointer;
 }
 
-.new-post-container button {
+.new-post-container > button {
   align-self: flex-end;
   padding: 8px 18px;
   border-radius: 20px;
-  background: linear-gradient(120deg, #2f6fed, #4f8cff);
+  background: linear-gradient(120deg, #b49060, #876d47);
   color: #fff;
   border: none;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 8px 16px rgba(47, 111, 237, 0.22);
+  box-shadow: 0 8px 16px rgba(180, 144, 96, 0.2);
+  transition: all 0.2s ease;
 }
 
-.new-post-container button:hover {
-  filter: brightness(1.03);
+.new-post-container > button:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(180, 144, 96, 0.25);
 }
 
 .feed-divider {
   height: 1px;
-  background: linear-gradient(to right, transparent, #d3e0f7, transparent);
+  background: linear-gradient(to right, transparent, rgba(232, 228, 219, 1), transparent);
   margin: 14px 0 12px;
 }
 
 .feed-empty-state {
   text-align: center;
-  color: #5b728a;
-  border: 1px dashed #c6d7f6;
+  color: #827a71;
+  border: 1px dashed rgba(180, 144, 96, 0.38);
   border-radius: 14px;
   padding: 18px;
   margin-bottom: 14px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.78), rgba(246, 238, 225, 0.68));
+  font-weight: 500;
 }
 
 .post-card {
-  background-color: #ffffff;
-  border: 1px solid #dbe7fb;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(232, 228, 219, 1);
   border-radius: 16px;
   padding: 14px 14px 12px;
   margin-bottom: 14px;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
   position: relative;
+  transition: all 0.3s ease;
+}
+
+.post-card:hover {
+  border-color: rgba(212, 206, 196, 1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
 }
 
 .post-header {
@@ -116,15 +197,16 @@
 
 .post-header strong {
   font-size: 0.92rem;
-  color: #1f3f6f;
+  color: #2d2926;
+  font-weight: 700;
 }
 
 .post-options {
   position: relative;
 }
 
-.post-options button {
-  background: #f4f7ff;
+.post-options button:not(.post-menu button) {
+  background: rgba(251, 250, 248, 0.8);
   border: none;
   width: 34px;
   height: 34px;
@@ -132,12 +214,13 @@
   font-size: 1.2rem;
   line-height: 1;
   cursor: pointer;
-  color: #546882;
+  color: #827a71;
+  transition: all 0.2s ease;
 }
 
-.post-options button:hover {
-  background: #eaf0ff;
-  color: #1d4eb5;
+.post-options button:hover:not(.post-menu button) {
+  background: rgba(232, 228, 219, 1);
+  color: #2d2926;
 }
 
 .post-menu {
@@ -145,10 +228,11 @@
   position: absolute;
   top: 38px;
   right: 0;
-  background: #fff;
-  border: 1px solid #d5e3fa;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(232, 228, 219, 1);
   border-radius: 12px;
-  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.15);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   min-width: 130px;
   z-index: 100;
   overflow: hidden;
@@ -163,12 +247,14 @@
   padding: 9px 12px;
   border: none;
   border-radius: 0;
-  background: #ffffff;
+  background: transparent;
   text-align: left;
   font-size: 0.88rem;
   cursor: pointer;
-  color: #173a66;
-  border-bottom: 1px solid #edf2fb;
+  color: #4a443c;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(251, 250, 248, 1);
+  transition: background 0.2s;
 }
 
 .post-menu button:last-child {
@@ -176,12 +262,13 @@
 }
 
 .post-menu button:hover {
-  background-color: #f6f9ff;
+  background-color: rgba(251, 250, 248, 1);
+  color: #b49060;
 }
 
 .post-content {
   font-size: 0.94rem;
-  color: #26445f;
+  color: #4a443c;
   line-height: 1.5;
   margin-bottom: 6px;
 }
@@ -190,34 +277,19 @@
   max-width: 100%;
   border-radius: 12px;
   margin-top: 8px;
-  border: 1px solid #d6e3fa;
+  border: 1px solid rgba(232, 228, 219, 1);
 }
 
 .shared-post {
-  border: 1px solid #d7e4fa;
+  border: 1px solid rgba(232, 228, 219, 1);
   padding: 11px;
   border-radius: 12px;
-  background: linear-gradient(180deg, #f8fbff, #f0f6ff);
+  background: rgba(251, 250, 248, 0.8);
   margin-top: 8px;
 }
 
 @media (max-width: 640px) {
-  .my-post-feed {
-    max-width: 100%;
-  }
-
-  .new-post-container {
-    padding: 12px;
-    border-radius: 14px;
-  }
-
-  .post-card {
-    padding: 12px;
-    border-radius: 14px;
-  }
-
-  .post-header strong {
-    font-size: 0.86rem;
-    max-width: calc(100% - 44px);
-  }
+  .my-post-feed { max-width: 100%; padding: 8px; border-radius: 16px; }
+  .new-post-container, .post-card { padding: 12px; border-radius: 14px; }
+  .post-header strong { font-size: 0.86rem; max-width: calc(100% - 44px); }
 }

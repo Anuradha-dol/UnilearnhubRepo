@@ -86,6 +86,7 @@ public class User implements UserDetails {
 
 
 
+
     // Self-referencing relationship
     @ManyToOne
     @JoinColumn(name = "parent_user_id")

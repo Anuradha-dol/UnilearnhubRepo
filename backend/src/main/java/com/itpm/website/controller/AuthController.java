@@ -105,4 +105,11 @@ public class AuthController {
         boolean available = !userRepo.findByPhoneNumber(phoneNumber).isPresent();
         return ResponseEntity.ok(Map.of("available", available));
     }
+
+    @PostMapping("/check-email")
+    public ResponseEntity<Map<String, Boolean>> checkEmail(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        boolean available = !userRepo.findByEmail(email).isPresent();
+        return ResponseEntity.ok(Map.of("available", available));
+    }
 }

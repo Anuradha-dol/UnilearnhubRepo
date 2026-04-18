@@ -17,6 +17,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -56,6 +58,10 @@ public class Post {
     private Interest learningPreference;
 
     private String imageUrl;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "learning_preference")
+    private Interest learningPreference;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

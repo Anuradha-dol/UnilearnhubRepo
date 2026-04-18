@@ -10,7 +10,13 @@ public interface ShareService {
 
     List<FeedResponse> getFullFeed();
 
+    List<FeedResponse> getFullFeed(int limit);
+
+    List<FeedResponse> getFullFeedByHashtag(String rawTag, int limit);
+
     List<FeedResponse> getMyShares(Long userId);
+
+    List<FeedResponse> getMyShares(Long userId, int limit);
 
     void deleteShare(Long userId, Long shareId);
 

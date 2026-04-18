@@ -1,5 +1,4 @@
 import SupportChatPage from "./SupportChatPage";
 
-export default function SupportAdmin() {
-  return <SupportChatPage mode="admin" />;
-}
+// This keeps the shared chat page in admin mode.
+export default function SupportAdmin() { return <SupportChatPage mode="admin" />; }

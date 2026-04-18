@@ -3,6 +3,11 @@ package com.itpm.website.dtos.post;
 import com.itpm.website.dtos.user.Interest;
 import java.time.LocalDateTime;
 import java.util.List;
+<<<<<<< HEAD
+=======
+
+import com.itpm.website.dtos.user.Interest;
+>>>>>>> 0f8eea20b4e90e0cc15af04d4a054f0067a282f2
 
 import lombok.Builder;
 import lombok.Getter;
@@ -27,4 +32,6 @@ public class FeedResponse {
     private String sharedByName;
     private String shareCaption;
     private LocalDateTime sharedAt;
+
+    private List<String> hashtags;
 }
