@@ -1,6 +1,7 @@
 package com.itpm.website.controller.User;
 
 import com.itpm.website.dtos.UserDto;
+import com.itpm.website.dtos.post.MentionSuggestionResponse;
 import com.itpm.website.enities.User;
 import com.itpm.website.repos.UserRepo;
 import com.itpm.website.service.AuthService;
@@ -8,6 +9,7 @@ import com.itpm.website.service.user.UserProfileService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +20,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -71,6 +76,56 @@ public class UserController {
         return ResponseEntity.ok(
                 userProfileService.getProfile(loggedUser.getUserId())
         );
+    }
+
+    @GetMapping("/mention-search")
+    public ResponseEntity<List<MentionSuggestionResponse>> mentionSearch(
+            @AuthenticationPrincipal User loggedUser,
+            @RequestParam(value = "q", required = false) String query,
+            @RequestParam(value = "limit", defaultValue = "8") int limit
+    ) {
+        if (loggedUser == null) {
+            return ResponseEntity.status(401).body(List.of());
+        }
+
+        String normalizedQuery = query == null ? "" : query.trim();
+        if (normalizedQuery.isBlank()) {
+            return ResponseEntity.ok(List.of());
+        }
+
+        int safeLimit = Math.max(1, Math.min(limit, 20));
+
+        List<User> matchedUsers = userRepo
+                .findByFirstnameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrderByFirstnameAscLastNameAsc(
+                        normalizedQuery,
+                        normalizedQuery,
+                        normalizedQuery,
+                        PageRequest.of(0, safeLimit * 2)
+                );
+
+        Map<Long, MentionSuggestionResponse> deduped = new LinkedHashMap<>();
+        for (User candidate : matchedUsers) {
+            if (candidate.getUserId() == null || candidate.getUserId().equals(loggedUser.getUserId())) {
+                continue;
+            }
+
+            String displayName = (candidate.getFirstname() + " " + candidate.getLastName()).trim();
+            deduped.putIfAbsent(
+                    candidate.getUserId(),
+                    MentionSuggestionResponse.builder()
+                            .userId(candidate.getUserId())
+                            .displayName(displayName)
+                            .email(candidate.getEmail())
+                            .build()
+            );
+        }
+
+        List<MentionSuggestionResponse> response = deduped.values()
+                .stream()
+                .limit(safeLimit)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
     @PreAuthorize("hasRole('USER')")

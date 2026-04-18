@@ -4,6 +4,7 @@ import com.itpm.website.dtos.user.Interest;
 import com.itpm.website.dtos.user.Role;
 import com.itpm.website.enities.User;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepo extends JpaRepository<User, Long> {
-
 
 
     Optional<User> findByEmail(String email);
@@ -29,9 +29,21 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     List<User> findByFirstnameContainingIgnoreCaseOrderByFirstnameAscLastNameAsc(String firstname);
 
+    List<User> findByFirstnameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrderByFirstnameAscLastNameAsc(
+            String firstname,
+            String lastName,
+            String email,
+            Pageable pageable
+    );
+
 
     List<User> findByInterestAndUserIdNot(Interest interest, Long userId);
 
+    Optional<User> findFirstByFirstnameIgnoreCaseAndLastNameIgnoreCase(String firstname, String lastName);
+
+    List<User> findByFirstnameIgnoreCase(String firstname);
+
+    List<User> findByLastNameIgnoreCase(String lastName);
 
 
 

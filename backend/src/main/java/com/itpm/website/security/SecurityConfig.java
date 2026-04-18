@@ -13,6 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
+import jakarta.servlet.DispatcherType;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration crf = new CorsConfiguration();
-                    crf.setAllowedOrigins(List.of("http://localhost:5173"));
+                    crf.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*"));
                     crf.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     crf.setAllowedHeaders(List.of("*"));
                     crf.setAllowCredentials(true);
@@ -41,9 +42,11 @@ public class SecurityConfig {
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers(
                                 "/auth/**",
                                 "/forgotpass/**",
+                                "/error",
                                 "/user/**",
                                 "/admin/**",
                                 "/posts/**","/comments/**","/shares/**","/reactions/**","/quizzes/**","/reviews/**","/support/**"
