@@ -13,8 +13,10 @@ import Review from "./review/Review";
 import SupportAdmin from "./review/SupportAdmin";
 import SupportUser from "./review/SupportUser";
 import LandingPage from "./landing/LandingPage";
-
-
+import Resources from "./library/Resources";
+import CreateQuiz from "./library/QuizPage";
+import ResourcesManagement from "./library/ResourcesManagement";
+import LearningResources from "./library/LearningResources";
 
 
 
@@ -40,7 +42,11 @@ function App() {
        <Route path="/home" element={<Home/>} />
         <Route path="/dashboard" element={<Dashboard/>} />
 
-
+ 
+        <Route path="/resources" element={<Resources />} />
+        <Route path="/learning-resources" element={<LearningResources />} />
+        <Route path="/resources-management" element={<ResourcesManagement />} />
+          <Route path="/createquiz/:videoId" element={<CreateQuiz />} />
        
 
 
