@@ -25,15 +25,14 @@ public class ChatController {
 
     @PostMapping("/chat")
     public ChatResponse chat(@RequestBody ChatRequest request) {
-
         if (request == null || request.getMessage() == null) {
             return new ChatResponse("Please enter a valid message.");
         }
 
-        String userMessage = request.getMessage().toLowerCase().trim();
-
-
-        // RULE-BASED FIXED RESPONSES
+        String userMessage = request.getMessage().toLowerCase(Locale.ROOT).trim();
+        if (userMessage.isBlank()) {
+            return new ChatResponse("Please enter a valid message.");
+        }
 
         if (userMessage.contains("uni learn hub")) {
             return new ChatResponse(
@@ -52,7 +51,6 @@ public class ChatController {
                     "You can start by choosing a course you are interested in, then follow its modules step by step."
             );
         }
-        //  DATABASE CONCEPT MATCHING
 
         List<Concept> allConcepts = conceptRepository.findAll();
         FuzzyScore fuzzyScore = new FuzzyScore(Locale.ENGLISH);
@@ -61,15 +59,19 @@ public class ChatController {
         int highestScore = 0;
 
         for (Concept concept : allConcepts) {
+            if (concept.getTopic() == null || concept.getDescription() == null) {
+                continue;
+            }
 
-            String topic = concept.getTopic().toLowerCase().trim();
+            String topic = concept.getTopic().toLowerCase(Locale.ROOT).trim();
+            if (topic.isBlank()) {
+                continue;
+            }
 
-            //Exact match (strongest)
             if (userMessage.contains(topic) || topic.contains(userMessage)) {
                 return new ChatResponse(concept.getDescription());
             }
 
-            //  Word-level matching
             String[] words = userMessage.split(" ");
             for (String word : words) {
                 if (word.length() > 3 && topic.contains(word)) {
@@ -77,10 +79,8 @@ public class ChatController {
                 }
             }
 
-            //  Fuzzy matching (both directions)
             int score1 = fuzzyScore.fuzzyScore(userMessage, topic);
             int score2 = fuzzyScore.fuzzyScore(topic, userMessage);
-
             int finalScore = Math.max(score1, score2);
 
             if (finalScore > highestScore) {
@@ -89,16 +89,12 @@ public class ChatController {
             }
         }
 
-        //  Apply threshold
         if (bestMatch != null && highestScore > 5) {
             return new ChatResponse(bestMatch.getDescription());
         }
 
-        // FALLBACK RESPONSE
-
         return new ChatResponse(
-                "Sorry, I didn’t understand that. You can ask about Uni Learn Hub, courses, frontend, backend, or deep learning."
+                "Sorry, I didn't understand that. You can ask about Uni Learn Hub, frontend, backend, fullstack development, deep learning, or how to learn."
         );
     }
 }
-

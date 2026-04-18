@@ -110,7 +110,7 @@ public class CommentController {
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body("Please login to delete comments");
+                    .body("Please login to delete comments");
         }
 
         Comment comment = commentService.getCommentById(commentId)
@@ -127,8 +127,10 @@ public class CommentController {
 
 
     @GetMapping("/{postId}/all")
-    public ResponseEntity<List<CommentResponse>> getComments(@PathVariable Long postId) {
-        List<Comment> comments = commentService.getCommentsByPost(postId);
+    public ResponseEntity<List<CommentResponse>> getComments(
+            @PathVariable Long postId,
+            @RequestParam(value = "limit", required = false) Integer limit) {
+        List<Comment> comments = commentService.getCommentsByPost(postId, limit);
 
         // Convert each Comment entity to DTO recursively
         List<CommentResponse> responses = comments.stream()
@@ -149,7 +151,7 @@ public class CommentController {
         return CommentResponse.builder()
                 .commentId(comment.getCommentId())
                 .content(comment.getContent())
-            .attachmentUrl(comment.getAttachmentUrl())
+                .attachmentUrl(comment.getAttachmentUrl())
                 .authorName(comment.getUser().getFirstname() + " " + comment.getUser().getLastName())
                 // Convert Date -> LocalDateTime
                 .createdAt(comment.getCreatedAt().toInstant()

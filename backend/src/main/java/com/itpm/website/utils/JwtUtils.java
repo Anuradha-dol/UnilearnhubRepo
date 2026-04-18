@@ -10,6 +10,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,12 @@ public class JwtUtils {
 
     @Value("Y2hhbGxlbmdlVG9Xcml0ZUZ1bGxQcmVkaWN0YWJsZVNlY3JldEtleQ==")
     private String secretKey;
+
+    @Value("${spring.cookie.secure:false}")
+    private boolean cookieSecure;
+
+    @Value("${spring.cookie.same-site:Lax}")
+    private String cookieSameSite;
 
     private static final long ACCESS_EXPIRATION_MS = 60 * 60 * 1000;
     private static final long REFRESH_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000L;
@@ -63,15 +71,7 @@ public class JwtUtils {
     }
 
     private void addCookie(HttpServletResponse response, Token type, String token, long expiryMs) {
-
-        String cookie = String.format(
-                "%s=%s; Max-Age=%d; Path=/; Secure; HttpOnly; SameSite=None",
-                type.name(),
-                token,
-                expiryMs / 1000
-        );
-
-        response.addHeader("Set-Cookie", cookie);
+        response.addHeader(HttpHeaders.SET_COOKIE, buildCookie(type.name(), token, expiryMs / 1000).toString());
     }
 
 
@@ -81,13 +81,7 @@ public class JwtUtils {
     }
 
     public void removeToken(HttpServletResponse response, Token tokenType) {
-
-        String cookie = String.format(
-                "%s=; Max-Age=0; Path=/; Secure; HttpOnly; SameSite=None",
-                tokenType.name()
-        );
-
-        response.addHeader("Set-Cookie", cookie);
+        response.addHeader(HttpHeaders.SET_COOKIE, buildCookie(tokenType.name(), "", 0).toString());
     }
 
     // ---------------- JWT Validation ----------------
@@ -119,6 +113,33 @@ public class JwtUtils {
     private SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private ResponseCookie buildCookie(String name, String value, long maxAgeSeconds) {
+        return ResponseCookie.from(name, value)
+                .httpOnly(true)
+                .secure(cookieSecure)
+                .path("/")
+                .maxAge(maxAgeSeconds)
+                .sameSite(resolveSameSite())
+                .build();
+    }
+
+    private String resolveSameSite() {
+        if (cookieSameSite == null || cookieSameSite.isBlank()) {
+            return "Lax";
+        }
+
+        String normalized = cookieSameSite.trim().toLowerCase();
+        if (!cookieSecure && "none".equals(normalized)) {
+            return "Lax";
+        }
+
+        return switch (normalized) {
+            case "strict" -> "Strict";
+            case "none" -> "None";
+            default -> "Lax";
+        };
     }
 }
 

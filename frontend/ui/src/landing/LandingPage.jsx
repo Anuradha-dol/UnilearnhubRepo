@@ -1,7 +1,48 @@
-// LandingPage.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LandingPage.css";
+import api from "../api";
+import logo from "../assets/logo.png";
+import LandingChatbot from "./LandingChatbot";
+
+const STATS = [
+  { value: "50K+", label: "Active Users" },
+  { value: "100+", label: "Modules & Resources" },
+  { value: "98%", label: "Satisfaction Rate" },
+];
+
+const FEATURES = [
+  {
+    tag: "01",
+    title: "Modules & Videos",
+    description: "Access video resources and modules to learn efficiently.",
+  },
+  {
+    tag: "02",
+    title: "Tasks & Achievements",
+    description: "Create tasks, achieve goals, and improve your productivity.",
+  },
+  {
+    tag: "03",
+    title: "Reminders",
+    description: "Set reminders to stay on track and improve your life.",
+  },
+  {
+    tag: "04",
+    title: "Posts & Questions",
+    description: "Ask questions, post updates, and interact with other users.",
+  },
+  {
+    tag: "05",
+    title: "Admin Panel",
+    description: "Admins can manage content, review questions, and moderate posts.",
+  },
+  {
+    tag: "06",
+    title: "Life Improvement",
+    description: "Tools and tips to enhance personal growth and learning.",
+  },
+];
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -9,46 +50,60 @@ export default function LandingPage() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
   const [privacyOpen, setPrivacyOpen] = useState(false);
 
   useEffect(() => {
+    let ignore = false;
+
     const fetchReviews = async () => {
       try {
-        const res = await fetch("http://localhost:8080/reviews");
-        if (!res.ok) throw new Error("Failed to fetch reviews");
-        const data = await res.json();
-        setReviews(data);
+        const response = await api.get("/reviews");
+        if (!ignore) {
+          setReviews(Array.isArray(response.data) ? response.data : []);
+        }
       } catch (err) {
-        setError(err.message);
+        if (!ignore) {
+          setError(err.response?.data?.message || err.message || "Failed to fetch reviews");
+        }
       } finally {
-        setLoading(false);
+        if (!ignore) {
+          setLoading(false);
+        }
       }
     };
+
     fetchReviews();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   return (
-    <div>
-      {/* ================= NAVBAR ================= */}
+    <div className="landing-shell">
       <nav className="navbar clean-navbar">
-        <div className="logo" onClick={() => window.scrollTo(0, 0)}>
-          Uni Learn Hub
+        <div className="logo" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+          <img src={logo} alt="Uni Learn Hub logo" className="logo-mark" />
+          <span>Uni Learn Hub</span>
         </div>
         <div className="nav-links">
-          <a href="#features">Features</a>
-          <a href="#testimonials">Testimonials</a>
-          <a href="#contact">Contact</a>
-          <button className="privacy-btn" onClick={() => setPrivacyOpen(true)}>
-            Privacy
-          </button>
-          <button className="login-btn" onClick={() => navigate("/login")}>
-            Login
-          </button>
+          <div className="nav-links__items">
+            <a href="#features">Features</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#contact">Contact</a>
+            <button type="button" className="privacy-btn" onClick={() => setPrivacyOpen(true)}>
+              Privacy
+            </button>
+          </div>
+          <div className="nav-links__actions">
+            <button type="button" className="login-btn" onClick={() => navigate("/login")}>
+              Login
+            </button>
+          </div>
         </div>
       </nav>
 
-      {/* ================= HERO ================= */}
       <section className="hero-section">
         <div className="hero-content">
           <div className="hero-text">
@@ -56,13 +111,14 @@ export default function LandingPage() {
               Learn Smarter, <span>Not Harder</span>
             </h1>
             <p>
-              Uni Learn Hub combines modules, video resources, tasks, posts, and reminders 
-              to help you improve your life and learning experience.
+              Uni Learn Hub combines modules, video resources, tasks, posts, and reminders to
+              help you improve your life and learning experience.
             </p>
-            <button className="get-started-btn" onClick={() => navigate("/signup")}>
+            <button type="button" className="get-started-btn" onClick={() => navigate("/signup")}>
               Get Started
             </button>
           </div>
+
           <div className="hero-image">
             <img
               src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
@@ -72,117 +128,110 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ================= STATS ================= */}
       <section className="stats-section">
-        {[
-          { value: "50K+", label: "Active Users" },
-          { value: "100+", label: "Modules & Resources" },
-          { value: "98%", label: "Satisfaction Rate" },
-        ].map((stat, idx) => (
-          <div className="stat-box" key={idx}>
+        {STATS.map((stat) => (
+          <div className="stat-box" key={stat.label}>
             <h2>{stat.value}</h2>
             <h6>{stat.label}</h6>
           </div>
         ))}
       </section>
 
-      {/* ================= FEATURES ================= */}
       <section id="features" className="features-section">
         <h2>Why Learners Love Us</h2>
         <p>Discover the tools that make learning effective and enjoyable</p>
         <div className="features-container">
-          {[
-            { icon: "📹", title: "Modules & Videos", desc: "Access video resources and modules to learn efficiently." },
-            { icon: "✅", title: "Tasks & Achievements", desc: "Create tasks, achieve goals, and improve your productivity." },
-            { icon: "⏰", title: "Reminders", desc: "Set reminders to stay on track and improve your life." },
-            { icon: "📝", title: "Posts & Questions", desc: "Ask questions, post updates, and interact with other users." },
-            { icon: "👥", title: "Admin Panel", desc: "Admins can manage content, review questions, and moderate posts." },
-            { icon: "💡", title: "Life Improvement", desc: "Tools and tips to enhance personal growth and learning." },
-          ].map((feature, idx) => (
-            <div className="feature-card" key={idx}>
-              <div className="feature-icon">{feature.icon}</div>
+          {FEATURES.map((feature) => (
+            <div className="feature-card" key={feature.title}>
+              <div className="feature-icon">{feature.tag}</div>
               <h5>{feature.title}</h5>
-              <p>{feature.desc}</p>
+              <p>{feature.description}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ================= TESTIMONIALS ================= */}
       <section id="testimonials" className="testimonials-section">
         <h2>User Reviews</h2>
         <p>Real feedback from our learners</p>
         <div className="reviews-container">
           {loading ? (
-            <p>Loading reviews...</p>
+            <p className="review-state">Loading reviews...</p>
           ) : error ? (
-            <p style={{ color: "red" }}>{error}</p>
+            <p className="review-state review-state--error">{error}</p>
+          ) : reviews.length === 0 ? (
+            <p className="review-state">No reviews available yet.</p>
           ) : (
-            reviews.slice(0, 6).map((review, idx) => (
-              <div className="review-card" key={idx}>
-                <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
-                  <div className="review-avatar">
-                    {review.username?.charAt(0)}
-                  </div>
+            reviews.slice(0, 6).map((review, index) => (
+              <div className="review-card" key={`${review.id || review.username}-${index}`}>
+                <div className="review-card__header">
+                  <div className="review-avatar">{(review.username || "U").charAt(0)}</div>
                   <div>
-                    <strong>{review.username}</strong>
-                    <div className="rating">{"⭐".repeat(review.rating)}</div>
+                    <strong>{review.username || "Learner"}</strong>
+                    <div className="rating">Rating {Number(review.rating || 0)}/5</div>
                   </div>
                 </div>
                 <p>"{review.comment}"</p>
-                <small>{new Date(review.createdAt).toLocaleDateString()}</small>
+                <small>
+                  {review.createdAt ? new Date(review.createdAt).toLocaleDateString() : "Recent"}
+                </small>
               </div>
             ))
           )}
         </div>
       </section>
 
-      {/* ================= FOOTER ================= */}
-      <footer className="footer">
+      <footer id="contact" className="footer">
         <div className="footer-container">
           <div>
             <strong>Uni Learn Hub</strong>
-            <p className="footer-info">© {new Date().getFullYear()} All rights reserved.</p>
+            <p className="footer-info">{new Date().getFullYear()} All rights reserved.</p>
           </div>
           <div className="footer-links">
-            <a href="#">Facebook</a>
-            <a href="#">Twitter</a>
-            <a href="#">LinkedIn</a>
-            <a href="#">Instagram</a>
+            <a href="#features">Features</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#contact">Contact</a>
           </div>
           <div>
-            <button className="privacy-btn" onClick={() => setPrivacyOpen(true)}>Privacy Policy</button>
-            <a href="#contact">Contact</a>
+            <button type="button" className="privacy-btn footer-privacy-btn" onClick={() => setPrivacyOpen(true)}>
+              Privacy Policy
+            </button>
           </div>
         </div>
       </footer>
 
-      {/* ================= CHAT BUTTON ================= */}
-      <div className="chat-btn" onClick={() => setDrawerOpen(!drawerOpen)}>
-        💬
-      </div>
-
-      {drawerOpen && (
-        <div className="chat-drawer">
-          <h3>Chat</h3>
-          <p>This is the chatbot area. Users can chat with support.</p>
+      {chatOpen ? (
+        <div className="chat-panel">
+          <LandingChatbot compact onClose={() => setChatOpen(false)} />
         </div>
-      )}
+      ) : null}
 
-      {/* ================= PRIVACY MODAL ================= */}
-      {privacyOpen && (
+      <button
+        type="button"
+        className={`chat-fab ${chatOpen ? "chat-fab--active" : ""}`}
+        onClick={() => setChatOpen((current) => !current)}
+        aria-label="Open chatbot"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 5.5C4 4.12 5.12 3 6.5 3h11C18.88 3 20 4.12 20 5.5v7C20 13.88 18.88 15 17.5 15H10l-4.2 3.5c-.33.27-.8.04-.8-.39V15.9C4.41 15.58 4 15.08 4 14.5v-9z" />
+        </svg>
+      </button>
+
+      {privacyOpen ? (
         <div className="privacy-modal" onClick={() => setPrivacyOpen(false)}>
-          <div className="privacy-content" onClick={(e) => e.stopPropagation()}>
+          <div className="privacy-content" onClick={(event) => event.stopPropagation()}>
             <h2>Privacy Policy</h2>
             <p>
-              At Uni Learn Hub, we value your privacy. This policy outlines how we collect,
-              use, and protect your information. We do not share your personal data with
-              third parties without your consent.
+              At Uni Learn Hub, we value your privacy. This policy outlines how we collect, use,
+              and protect your information. We do not share your personal data with third parties
+              without your consent.
             </p>
-            <button className="get-started-btn" onClick={() => setPrivacyOpen(false)}>Close</button>
+            <button type="button" className="get-started-btn" onClick={() => setPrivacyOpen(false)}>
+              Close
+            </button>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

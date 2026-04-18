@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import api from "../api";
-import "./Login.css"; 
+import "./Login.css";
 
 export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
+  const [message, setMessage] = useState("");
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -28,20 +27,14 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-
-      //show validation errors as toast
-      Object.values(validationErrors).forEach(msg =>
-        toast.error(msg, { position: "top-right" })
-      );
-
       return;
     }
 
     setLoading(true);
+    setMessage("");
 
     try {
       const res = await api.post("/auth/login", form, {
@@ -50,9 +43,9 @@ export default function Login() {
       });
 
       if (res.data.success) {
-        toast.success("🎉 Login successful! Redirecting...", { position: "top-right" });
-
-        if (res.data.token) localStorage.setItem("token", res.data.token);
+        setMessage("Login successful! Redirecting...");
+        const accessToken = res.data.accessToken || res.data.token;
+        if (accessToken) localStorage.setItem("token", accessToken);
         if (res.data.user) localStorage.setItem("user", JSON.stringify(res.data.user));
 
         setTimeout(() => {
@@ -61,15 +54,11 @@ export default function Login() {
           else if (role === "ROLE_MANAGER") navigate("/management");
           else navigate("/home");
         }, 1500);
-
       } else {
-        toast.error(res.data.message || "Login failed. Check credentials.", { position: "top-right" });
+        setMessage(res.data.message || "Login failed. Check credentials.");
       }
-
     } catch (err) {
-      toast.error(err.response?.data?.message || "Unable to connect to server.", {
-        position: "top-right",
-      });
+      setMessage(err.response?.data?.message || "Unable to connect to server.");
     } finally {
       setLoading(false);
     }
@@ -77,76 +66,90 @@ export default function Login() {
 
   return (
     <div className="login-page">
-      
-  
-      <ToastContainer />
+      <div className="login-page__canvas" />
 
-      <div className="login-container">
-    
-        <div className="login-info">
-          <h1>Uni Learn Hub</h1>
-          <p>Where knowledge meets community</p>
-          <ul>
-            <li>Get expert answers to your questions</li>
-            <li>Connect with thousands of IT professionals</li>
-            <li>Practical knowledge for career growth</li>
-          </ul>
-          <p>Join 50,000+ learners already sharing solutions.</p>
-        </div>
+      <div className="login-layout">
+        <section className="login-showcase" aria-hidden="true">
+          <div className="login-showcase__photo">
+            <span className="login-showcase__atom" />
+          </div>
+        </section>
 
-        <div className="login-card">
-          <h2>Welcome Back</h2>
-          <p>Sign in to continue your learning journey</p>
+        <section className="login-card-wrap">
+          <div className="login-card">
+            <span className="login-card__ornament login-card__ornament--left" aria-hidden="true" />
+            <span className="login-card__ornament login-card__ornament--right" aria-hidden="true" />
 
-          <form onSubmit={handleSubmit} noValidate>
-            <div className="form-group">
-              <label>Email Address</label>
-              <input
-                type="email"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-              />
-              {errors.email && <span className="error">{errors.email}</span>}
+            <div className="login-card__header">
+              <span className="login-card__eyebrow">Sign in</span>
+              <h2>Continue your journey</h2>
+              <p>Access your account, resources, and community progress.</p>
             </div>
 
-            <div className="form-group">
-              <label>Password</label>
-              <div className="password-wrapper">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={form.password}
-                  onChange={handleChange}
-                />
-                <button
-                  type="button"
-                  className="show-btn"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button>
+            {message ? (
+              <div className={`message ${message.includes("successful") ? "success" : "error"}`}>
+                {message}
               </div>
-              {errors.password && <span className="error">{errors.password}</span>}
+            ) : null}
+
+            <form onSubmit={handleSubmit} noValidate>
+              <div className="form-group">
+                <label htmlFor="login-email">Email Address</label>
+                <input
+                  id="login-email"
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="you@example.com"
+                />
+                {errors.email ? <span className="error">{errors.email}</span> : null}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="login-password">Password</label>
+                <div className="password-wrapper">
+                  <input
+                    id="login-password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    placeholder="Enter your password"
+                  />
+                  <button
+                    type="button"
+                    className="show-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+                {errors.password ? <span className="error">{errors.password}</span> : null}
+              </div>
+
+              <div className="login-card__meta">
+                <div className="forgot-password">
+                  <Link to="/forgot-password">Forgot password?</Link>
+                </div>
+              </div>
+
+              <button type="submit" disabled={loading} className="login-btn">
+                {loading ? "Loading..." : "Login"}
+              </button>
+            </form>
+
+            <div className="login-card__footer">
+              <p className="signup-link">
+                New to Uni Learn Hub? <Link to="/signup">Create an account</Link>
+              </p>
             </div>
-
-            <div className="forgot-password">
-              <Link to="/forgot-password">Forgot password?</Link>
-            </div>
-
-            <button type="submit" disabled={loading} className="login-btn">
-              {loading ? "⏳ Logging in..." : "Login"}
-            </button>
-          </form>
-
-          <p className="signup-link">
-            New to Uni Learn Hub? <Link to="/signup">Sign up</Link>
-          </p>
-        </div>
+          </div>
+        </section>
       </div>
 
-      <footer>
-        © {new Date().getFullYear()} Uni Learn Hub. All rights reserved.
+      <footer className="login-page__footer">
+        {new Date().getFullYear()} Uni Learn Hub. All rights reserved.
       </footer>
     </div>
   );

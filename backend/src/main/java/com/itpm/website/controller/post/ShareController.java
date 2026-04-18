@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,6 +21,7 @@ import com.itpm.website.dtos.post.ShareResponse;
 import com.itpm.website.enities.User;
 import com.itpm.website.enities.post.Share;
 import com.itpm.website.service.post.ShareService;
+import com.itpm.website.utils.UploadMediaResolver;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class ShareController {
 
     private final ShareService shareService;
+    private final UploadMediaResolver uploadMediaResolver;
 
 
     @PostMapping("/{postId}/share")
@@ -46,11 +49,11 @@ public class ShareController {
         ShareResponse response = ShareResponse.builder()
                 .postId(share.getShareId())
                 .sharedByName(user.getFirstname() + " " + user.getLastName())
-            .sharedAt(java.sql.Timestamp.valueOf(share.getCreatedAt()))
+                .sharedAt(java.sql.Timestamp.valueOf(share.getCreatedAt()))
                 .caption(share.getCaption())
                 .originalPostId(share.getPost().getPostId())
                 .originalContent(share.getPost().getContent())
-                .originalImageUrl(share.getPost().getImageUrl())
+                .originalImageUrl(uploadMediaResolver.safeUploadUrl(share.getPost().getImageUrl()))
                 .originalAuthorName(share.getPost().getAuthorName())
                 .build();
 
@@ -59,16 +62,23 @@ public class ShareController {
 
 
     @GetMapping("/feed")
-    public ResponseEntity<List<FeedResponse>> getFeed() {
-        return ResponseEntity.ok(shareService.getFullFeed());
+    public ResponseEntity<List<FeedResponse>> getFeed(
+            @RequestParam(value = "limit", defaultValue = "50") int limit,
+            @RequestParam(value = "tag", required = false) String tag) {
+        if (tag == null || tag.isBlank()) {
+            return ResponseEntity.ok(shareService.getFullFeed(limit));
+        }
+        return ResponseEntity.ok(shareService.getFullFeedByHashtag(tag, limit));
     }
 
     @GetMapping("/my")
-    public ResponseEntity<List<FeedResponse>> getMyShares(@AuthenticationPrincipal User user) {
+    public ResponseEntity<List<FeedResponse>> getMyShares(
+            @AuthenticationPrincipal User user,
+            @RequestParam(value = "limit", defaultValue = "30") int limit) {
         if (user == null) {
             throw new ResponseStatusException(UNAUTHORIZED, "Please login first");
         }
-        return ResponseEntity.ok(shareService.getMyShares(user.getUserId()));
+        return ResponseEntity.ok(shareService.getMyShares(user.getUserId(), limit));
     }
 
 
