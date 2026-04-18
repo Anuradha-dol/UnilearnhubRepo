@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: website
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/it_db
+    username: postgres
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update   # dev only, prod -> validate
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "anuradhawork123@gmail.com"
+    password: "psid ggoz qszq hzhs"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  server:
+    port: 8080
+
+  jwt:
+    secret: "Y2hhbGxlbmdlVG9pcmu0ZU41bGxQcmVkaWN0YWJsZVNlY3JldEtleQ=="
+
+  cookie:
+    secure: false     # true in production (HTTPS)
+    same-site: Lax    # None if frontend & backend are on different domains
