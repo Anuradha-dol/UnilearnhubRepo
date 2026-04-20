@@ -36,7 +36,7 @@ public class ChatController {
 
         if (userMessage.contains("uni learn hub")) {
             return new ChatResponse(
-                    "Uni Learn Hub is an online learning platform for frontend, backend, and fullstack development."
+                    "Uni Learn Hub is an online platform for university students to share knowledge and resources."
             );
         }
 
