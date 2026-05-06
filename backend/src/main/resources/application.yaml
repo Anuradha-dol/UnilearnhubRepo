@@ -36,7 +36,7 @@ spring:
             enable: true
 
   jwt:
-    secret: "Y2hhbGxlbmdlVG9pcmu0ZU41bGxQcmVkaWN0YWJsZVNlY3JldEtleQ=="
+    secret: ""
 
   cookie:
     secure: false     # true in production (HTTPS)
