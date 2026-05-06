@@ -27,7 +27,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: "anuradhawork123@gmail.com"
-    password: "umae tfzt zkli wjow"
+    password: ""
     properties:
       mail:
         smtp:
@@ -36,7 +36,7 @@ spring:
             enable: true
 
   jwt:
-    secret: "Y2hhbGxlbmdlVG9pcmu0ZU41bGxQcmVkaWN0YWJsZVNlY3JldEtleQ=="
+    secret: ""
 
   cookie:
     secure: false     # true in production (HTTPS)
