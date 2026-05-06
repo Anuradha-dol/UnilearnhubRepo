@@ -11,7 +11,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/itpm_uni_learnhub_project
     username: postgres
-    password: Anu@20021214
+    password: 
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 20
@@ -27,7 +27,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: "anuradhawork123@gmail.com"
-    password: "umae tfzt zkli wjow"
+    password: ""
     properties:
       mail:
         smtp:
