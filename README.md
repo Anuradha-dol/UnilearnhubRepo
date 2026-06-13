@@ -664,12 +664,8 @@ npm run dev
 - Local IDE files such as `.idea/` and `.vscode/` are ignored by Git.
 - Rotate any credentials that were ever committed in old branches or commit history.
 
-## Professional Repository Rules
+## Development Notes
 
-- Keep source code, documentation, config templates, lock files, and tests in Git.
-- Keep generated files, build folders, logs, runtime uploads, and local environment files out of Git.
-- Do not hardcode passwords, app passwords, JWT secrets, or database credentials.
-- Prefer environment variables for all deployment-specific configuration.
-- Keep the `final` branch stable and use feature branches for future module changes.
-- Validate frontend changes with `npm run lint` and `npm run build`.
-- Validate backend changes with Maven tests or at least `./mvnw -DskipTests package` when the local database is unavailable.
+The `final` branch is kept as the stable project branch. Source code, documentation, environment templates, and required project files are tracked in Git. Local uploads, logs, build outputs, IDE settings, and real `.env` files are intentionally ignored so the repository stays clean and safe to share.
+
+Before pushing future changes, run the relevant frontend or backend checks when possible. Frontend changes should pass `npm run lint` and `npm run build`; backend changes should pass Maven tests, or at minimum `./mvnw -DskipTests package` when a local PostgreSQL test database is not available.
