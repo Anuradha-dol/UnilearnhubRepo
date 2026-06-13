@@ -23,12 +23,20 @@ public class UserDto {
                                   @NotNull(message = "Interest is required") Interest interest,
 
 
-                                  @NotBlank(message = "password is required") String password) {
+                                  @NotBlank(message = "password is required")
+                                  @Size(min = 8, message = "Password must be at least 8 characters")
+                                  String password) {
 
 
     }
 
-    public record ChangePassword(String password, String repeatPassword) {
+    public record ChangePassword(
+            @NotBlank(message = "Password is required")
+            @Size(min = 8, message = "Password must be at least 8 characters")
+            String password,
+
+            @NotBlank(message = "Confirm password is required")
+            String repeatPassword) {
 
 
     }
@@ -78,7 +86,7 @@ public class UserDto {
             String currentPassword,
 
             @NotBlank(message = "New password is required")
-            @Size(min = 6, message = "Password must be at least 6 characters")
+            @Size(min = 8, message = "Password must be at least 8 characters")
             String newPassword,
 
             @NotBlank(message = "Confirm password is required")

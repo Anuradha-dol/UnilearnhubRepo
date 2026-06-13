@@ -135,8 +135,8 @@ export default function SettingsPage() {
   const validatePassword = () => {
     if (!passwordForm.currentPassword)
       { toast.error("Current password required"); return false; }
-    if (passwordForm.newPassword.length < 6)
-      { toast.error("Password must be at least 6 characters"); return false; }
+    if (passwordForm.newPassword.length < 8)
+      { toast.error("Password must be at least 8 characters"); return false; }
     if (passwordForm.newPassword !== passwordForm.confirmPassword)
       { toast.error("Passwords do not match"); return false; }
     return true;

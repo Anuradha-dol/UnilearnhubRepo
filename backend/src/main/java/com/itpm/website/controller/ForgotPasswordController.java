@@ -4,6 +4,7 @@ import com.itpm.website.dtos.UserDto;
 import com.itpm.website.service.ForgotPasswordService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class ForgotPasswordController {
     @PostMapping("/change-password")
     public ResponseEntity<String> changePassword(HttpServletRequest request,
                                                  HttpServletResponse response,
-                                                 @RequestBody UserDto.ChangePassword dto) {
+                                                 @Valid @RequestBody UserDto.ChangePassword dto) {
         return forgotPasswordService.changePassword(request, response, dto);
     }
 }

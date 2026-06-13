@@ -20,9 +20,15 @@ This documentation describes the current `final` branch.
 | Member | Main Module | Implemented Functional Areas |
 | --- | --- | --- |
 | Anuradha | User Management | Registration, login, OTP email verification, JWT authentication, HTTP-only cookie security, forgot-password recovery, profile and account settings, admin/user profile access, realtime problem asking/support chat, user-to-user chat, user-to-admin chat, admin-to-user chat, review system, and concept-based help chat. |
-| Sasindi | Knowledge Sharing and Content Management | Video resource upload and streaming, shared library uploads and downloads, resource filtering, learning content management, quiz creation, quiz update/delete, learner quiz attempts, and quiz result handling. |
-| Laksra | Task Management | Personal task creation, admin task assignment, subtasks, task completion, progress dashboard, leaderboard, task notifications, gamification sessions, subject quiz game, and business simulation game. |
-| Yohan | Resource Management | Community post feed, post uploads, comments, nested replies, reactions, shares, hashtags, saved post collections, user feed, notification stream, and media attachment handling. |
+| Sasindi | Knowledge Sharing and Content Management | Community stream, post creation, comments, replies, reactions, shares, hashtags, saved collections, user feed, mention search support, and live notification stream. |
+| Laksara | Task Management | Personal task creation, admin task assignment, subtasks, task completion, progress dashboard, leaderboard, task notifications, gamification sessions, subject quiz game, and business simulation game. |
+| Yohan | Resource Management | Admin resource control, video resource upload and streaming, shared library uploads/downloads, resource filtering, learning content delivery, quiz creation/update/delete, learner quiz attempts, and media file handling. |
+
+## Project Documents
+
+| Document | Description |
+| --- | --- |
+| [UniLearn Hub Professional Case Study](docs/UniLearn_Hub_Professional_Case_Study.pdf) | Portfolio-style PDF with architecture notes, implementation metrics, UI evidence, and member-wise contribution screenshots. |
 
 ## Technology Stack
 
@@ -98,6 +104,7 @@ Main endpoints:
 - Forgot-password verification creates a VERIFY token with a 30-minute expiry.
 - JWT roles are embedded into token claims for authorization.
 - Tokens are stored in HTTP-only cookies, reducing exposure to client-side JavaScript.
+- Registration, reset, and profile password-update flows require passwords with at least 8 characters.
 - Cookie behavior is controlled through environment variables:
   - `COOKIE_SECURE`
   - `COOKIE_SAME_SITE`
@@ -115,7 +122,7 @@ Main endpoints:
 - OTP resend uses the same 3-attempt limit and 30-minute block strategy.
 - The flow stores the recovery email in an HTTP-only `forgotEmail` cookie.
 - After OTP verification, the backend issues a short-lived VERIFY token.
-- Password change requires the VERIFY token and matching new/repeat password fields.
+- Password change requires the VERIFY token, at least 8 characters, and matching new/repeat password fields.
 - After a successful password change, the forgot-password record is deleted and the VERIFY token is removed.
 
 Main endpoints:
@@ -235,145 +242,7 @@ Main endpoints:
 
 Owner: Sasindi
 
-This module manages educational resources, video learning material, shared files, and quizzes.
-
-#### Video Resource Management
-
-- Admin users can upload learning videos.
-- Each video can store title, description, year, semester, and academic year.
-- Authenticated users can list all videos.
-- Admin users can view their uploaded videos.
-- Admin users can update or delete their own videos.
-- Videos can be streamed inline through the backend.
-- Video lists can be filtered by year, semester, title, and academic year.
-
-Main endpoints:
-
-| Endpoint | Purpose |
-| --- | --- |
-| `POST /api/videos/upload` | Admin video upload |
-| `GET /api/videos/all` | List all videos |
-| `GET /api/videos/my` | Admin's uploaded videos |
-| `PUT /api/videos/{id}` | Update video metadata |
-| `DELETE /api/videos/{id}` | Delete video |
-| `GET /api/videos/stream/{id}` | Stream video |
-| `GET /api/videos/filter` | Filter video resources |
-
-#### Shared Library Resources
-
-- Authenticated users can upload shared learning resources.
-- Resources store title, description, year, semester, file metadata, uploader details, content type, and file size.
-- Users can list all shared resources or their own uploads.
-- Users can filter resources by year, semester, title, and resource type.
-- Resources can be streamed or downloaded.
-- Video resources stream inline, while other resources download as attachments.
-- Owners can delete their uploaded resources.
-
-Main endpoints:
-
-| Endpoint | Purpose |
-| --- | --- |
-| `POST /api/shared-resources/upload` | Upload shared resource |
-| `GET /api/shared-resources/all` | List all shared resources |
-| `GET /api/shared-resources/my` | List current user's uploads |
-| `GET /api/shared-resources/filter` | Filter resources |
-| `DELETE /api/shared-resources/{id}` | Delete resource |
-| `GET /api/shared-resources/stream/{id}` | Stream/open resource |
-| `GET /api/shared-resources/download/{id}` | Download resource |
-
-#### Quiz Management
-
-- Admin users can create quiz questions for videos.
-- Admin users can update or delete quiz questions.
-- Learners can retrieve a quiz for a selected video.
-- Learners can submit answers.
-- The service returns attempt/result data to the frontend.
-
-Main endpoints:
-
-| Endpoint | Purpose |
-| --- | --- |
-| `GET /quizzes/{videoId}` | Learner quiz attempt |
-| `POST /quizzes/{videoId}/submit` | Submit quiz answers |
-| `GET /quizzes/admin/{videoId}` | Admin view of quiz questions |
-| `POST /quizzes/create` | Create quiz question |
-| `PUT /quizzes/update/{id}` | Update quiz question |
-| `DELETE /quizzes/delete/{id}` | Delete quiz question |
-
-### 3. Task Management
-
-Owner: Laksra
-
-This module supports student task planning, admin task assignment, task status tracking, notifications, dashboards, leaderboard, and gamified learning.
-
-#### User Task Workflow
-
-- Users can create their own main tasks.
-- Tasks can contain subtasks.
-- Users can view their own tasks.
-- Users can update subtask status.
-- Users can mark a main task as complete.
-- Users can delete their own main tasks or subtasks.
-- The dashboard summarizes task progress and activity.
-- Leaderboard data is available for ranking users.
-
-Main endpoints:
-
-| Endpoint | Purpose |
-| --- | --- |
-| `POST /tasks/create` | Create self task |
-| `GET /tasks/my` | List current user's tasks |
-| `GET /tasks/dashboard` | Task dashboard metrics |
-| `GET /tasks/leaderboard` | Leaderboard |
-| `PUT /tasks/subtask/{id}/status` | Update subtask status |
-| `POST /tasks/{id}/complete` | Complete task |
-| `DELETE /tasks/maintask/{id}` | Delete main task |
-| `DELETE /tasks/subtask/{id}` | Delete subtask |
-
-#### Admin Task Assignment
-
-- Admins can assign tasks to users.
-- Admins can list assignable users.
-- Admins can view all assigned tasks.
-- Admins can delete assigned tasks.
-
-Main endpoints:
-
-| Endpoint | Purpose |
-| --- | --- |
-| `POST /tasks/admin/assign` | Assign task to user |
-| `GET /tasks/admin/users` | List assignable users |
-| `GET /tasks/admin/assigned` | List all assigned tasks |
-| `DELETE /tasks/admin/{id}` | Delete assigned task |
-
-#### Task Notifications and Gamification
-
-- Users can list unread task notifications.
-- Users can mark task notifications as read.
-- Users can delete task notifications.
-- Gamification sessions can be started per feature.
-- Subject quiz game questions can be loaded and submitted.
-- Business simulation scenarios can be loaded and submitted.
-- Rewards/unlocks are handled through the task gamification service.
-
-Main endpoints:
-
-| Endpoint | Purpose |
-| --- | --- |
-| `GET /tasks/notifications` | List task notifications |
-| `PUT /tasks/notifications/{id}/read` | Mark task notification read |
-| `DELETE /tasks/notifications/{id}` | Delete task notification |
-| `POST /tasks/games/{feature}/session` | Start game session |
-| `GET /tasks/games/subject-quiz` | Load subject quiz |
-| `POST /tasks/games/subject-quiz/submit` | Submit subject quiz |
-| `GET /tasks/games/business-simulation` | Load business scenario |
-| `POST /tasks/games/business-simulation/submit` | Submit business decision |
-
-### 4. Resource and Community Management
-
-Owner: Yohan
-
-This module provides the community feed and social learning resource interactions.
+This module provides the knowledge-sharing community stream and social learning interactions.
 
 #### Posts and Feed
 
@@ -449,6 +318,144 @@ Main endpoints:
 | `PATCH /notifications/read-all` | Mark all notifications read |
 | `GET /notifications/stream` | SSE notification stream |
 
+### 3. Task Management
+
+Owner: Laksara
+
+This module supports student task planning, admin task assignment, task status tracking, notifications, dashboards, leaderboard, and gamified learning.
+
+#### User Task Workflow
+
+- Users can create their own main tasks.
+- Tasks can contain subtasks.
+- Users can view their own tasks.
+- Users can update subtask status.
+- Users can mark a main task as complete.
+- Users can delete their own main tasks or subtasks.
+- The dashboard summarizes task progress and activity.
+- Leaderboard data is available for ranking users.
+
+Main endpoints:
+
+| Endpoint | Purpose |
+| --- | --- |
+| `POST /tasks/create` | Create self task |
+| `GET /tasks/my` | List current user's tasks |
+| `GET /tasks/dashboard` | Task dashboard metrics |
+| `GET /tasks/leaderboard` | Leaderboard |
+| `PUT /tasks/subtask/{id}/status` | Update subtask status |
+| `POST /tasks/{id}/complete` | Complete task |
+| `DELETE /tasks/maintask/{id}` | Delete main task |
+| `DELETE /tasks/subtask/{id}` | Delete subtask |
+
+#### Admin Task Assignment
+
+- Admins can assign tasks to users.
+- Admins can list assignable users.
+- Admins can view all assigned tasks.
+- Admins can delete assigned tasks.
+
+Main endpoints:
+
+| Endpoint | Purpose |
+| --- | --- |
+| `POST /tasks/admin/assign` | Assign task to user |
+| `GET /tasks/admin/users` | List assignable users |
+| `GET /tasks/admin/assigned` | List all assigned tasks |
+| `DELETE /tasks/admin/{id}` | Delete assigned task |
+
+#### Task Notifications and Gamification
+
+- Users can list unread task notifications.
+- Users can mark task notifications as read.
+- Users can delete task notifications.
+- Gamification sessions can be started per feature.
+- Subject quiz game questions can be loaded and submitted.
+- Business simulation scenarios can be loaded and submitted.
+- Rewards/unlocks are handled through the task gamification service.
+
+Main endpoints:
+
+| Endpoint | Purpose |
+| --- | --- |
+| `GET /tasks/notifications` | List task notifications |
+| `PUT /tasks/notifications/{id}/read` | Mark task notification read |
+| `DELETE /tasks/notifications/{id}` | Delete task notification |
+| `POST /tasks/games/{feature}/session` | Start game session |
+| `GET /tasks/games/subject-quiz` | Load subject quiz |
+| `POST /tasks/games/subject-quiz/submit` | Submit subject quiz |
+| `GET /tasks/games/business-simulation` | Load business scenario |
+| `POST /tasks/games/business-simulation/submit` | Submit business decision |
+
+### 4. Resource Management
+
+Owner: Yohan
+
+This module manages educational resources, video learning material, shared files, quizzes, and resource delivery.
+
+#### Video Resource Management
+
+- Admin users can upload learning videos.
+- Each video can store title, description, year, semester, and academic year.
+- Authenticated users can list all videos.
+- Admin users can view their uploaded videos.
+- Admin users can update or delete their own videos.
+- Videos can be streamed inline through the backend.
+- Video lists can be filtered by year, semester, title, and academic year.
+
+Main endpoints:
+
+| Endpoint | Purpose |
+| --- | --- |
+| `POST /api/videos/upload` | Admin video upload |
+| `GET /api/videos/all` | List all videos |
+| `GET /api/videos/my` | Admin's uploaded videos |
+| `PUT /api/videos/{id}` | Update video metadata |
+| `DELETE /api/videos/{id}` | Delete video |
+| `GET /api/videos/stream/{id}` | Stream video |
+| `GET /api/videos/filter` | Filter video resources |
+
+#### Shared Library Resources
+
+- Authenticated users can upload shared learning resources.
+- Resources store title, description, year, semester, file metadata, uploader details, content type, and file size.
+- Users can list all shared resources or their own uploads.
+- Users can filter resources by year, semester, title, and resource type.
+- Resources can be streamed or downloaded.
+- Video resources stream inline, while other resources download as attachments.
+- Owners can delete their uploaded resources.
+
+Main endpoints:
+
+| Endpoint | Purpose |
+| --- | --- |
+| `POST /api/shared-resources/upload` | Upload shared resource |
+| `GET /api/shared-resources/all` | List all shared resources |
+| `GET /api/shared-resources/my` | List current user's uploads |
+| `GET /api/shared-resources/filter` | Filter resources |
+| `DELETE /api/shared-resources/{id}` | Delete resource |
+| `GET /api/shared-resources/stream/{id}` | Stream/open resource |
+| `GET /api/shared-resources/download/{id}` | Download resource |
+
+#### Quiz Management
+
+- Admin users can create quiz questions for videos.
+- Admin users can update or delete quiz questions.
+- Learners can retrieve a quiz for a selected video.
+- Learners can submit answers.
+- The service returns attempt/result data to the frontend.
+
+Main endpoints:
+
+| Endpoint | Purpose |
+| --- | --- |
+| `GET /quizzes/{videoId}` | Learner quiz attempt |
+| `POST /quizzes/{videoId}/submit` | Submit quiz answers |
+| `GET /quizzes/admin/{videoId}` | Admin view of quiz questions |
+| `POST /quizzes/create` | Create quiz question |
+| `PUT /quizzes/update/{id}` | Update quiz question |
+| `DELETE /quizzes/delete/{id}` | Delete quiz question |
+
 ## Frontend Routes
 
 | Route | Screen |
@@ -505,6 +512,7 @@ UnilearnhubRepo/
         api.js                 Shared Axios client
       package.json             Frontend scripts and dependencies
 
+  docs/                        Project case-study and supporting documentation
   uploads/                     Local runtime uploads, ignored by Git except .gitkeep
   .env.example                 Backend environment template
   frontend/ui/.env.example     Frontend environment template
@@ -655,7 +663,7 @@ npm run dev
 
 ## Security Notes
 
-- Passwords are hashed with BCrypt.
+- Passwords are hashed with BCrypt and validated with a minimum length of 8 characters.
 - JWT secrets are environment-driven and validated during startup.
 - JWT tokens are placed in HTTP-only cookies with configurable `Secure` and `SameSite`.
 - Use `COOKIE_SECURE=true` in HTTPS production environments.

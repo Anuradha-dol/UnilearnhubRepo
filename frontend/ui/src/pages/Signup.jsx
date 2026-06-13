@@ -65,7 +65,7 @@ export default function Signup() {
       else if (!/^\d{10}$/.test(form.phoneNumber)) newErrors.phoneNumber = "Phone must be 10 digits";
 
       if (!form.password.trim()) newErrors.password = "Password cannot be empty";
-      else if (form.password.length < 6) newErrors.password = "Password must be at least 6 characters";
+      else if (form.password.length < 8) newErrors.password = "Password must be at least 8 characters";
 
       if (/^\d{10}$/.test(form.phoneNumber)) {
         try {
