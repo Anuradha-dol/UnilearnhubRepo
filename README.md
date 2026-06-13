@@ -1,5 +1,15 @@
 # UniLearnHub
 
+<p align="center">
+  <img src="docs/landing-page-screenshot.png" alt="Uni Learn Hub landing page screenshot" width="100%" />
+</p>
+
+<p align="center">
+  <a href="docs/landing-page-screenshot.png"><strong>UI Screenshot</strong></a>
+  &nbsp;|&nbsp;
+  <a href="docs/UniLearn_Hub_Professional_Case_Study.pdf"><strong>Project Report</strong></a>
+</p>
+
 UniLearnHub is a full-stack platform for university learning and collaboration. In this project, we built the main student and admin workflows around user accounts, secure authentication, learning resources, task planning, community posts, realtime support chat, and reviews.
 
 This README documents the current `final` branch.
@@ -28,7 +38,8 @@ This README documents the current `final` branch.
 
 | Document | Description |
 | --- | --- |
-| [UniLearn Hub Professional Case Study](docs/UniLearn_Hub_Professional_Case_Study.pdf) | Project case-study PDF with architecture notes, implementation metrics, UI evidence, and member-wise contribution screenshots. |
+| [UI Screenshot](docs/landing-page-screenshot.png) | Landing page preview captured from the React/Vite frontend. |
+| [Project Report](docs/UniLearn_Hub_Professional_Case_Study.pdf) | Project report PDF with architecture notes, implementation metrics, UI evidence, and member-wise contribution screenshots. |
 
 ## Technology Stack
 
