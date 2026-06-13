@@ -1,8 +1,8 @@
 # UniLearnHub
 
-UniLearnHub is a full-stack university learning and collaboration platform. It combines user account management, secure authentication, learning resource sharing, task planning, community posts, realtime support chat, and review management in one application.
+UniLearnHub is a full-stack platform for university learning and collaboration. In this project, we built the main student and admin workflows around user accounts, secure authentication, learning resources, task planning, community posts, realtime support chat, and reviews.
 
-This documentation describes the current `final` branch.
+This README documents the current `final` branch.
 
 ## Project Status
 
@@ -17,7 +17,7 @@ This documentation describes the current `final` branch.
 
 ## Team Contributions
 
-| Member | Main Module | Implemented Functional Areas |
+| Member | Main Module | Work Completed |
 | --- | --- | --- |
 | Anuradha | User Management | Registration, login, OTP email verification, JWT authentication, HTTP-only cookie security, forgot-password recovery, profile and account settings, admin/user profile access, realtime problem asking/support chat, user-to-user chat, user-to-admin chat, admin-to-user chat, review system, and concept-based help chat. |
 | Sasindi | Knowledge Sharing and Content Management | Community stream, post creation, comments, replies, reactions, shares, hashtags, saved collections, user feed, mention search support, and live notification stream. |
@@ -28,7 +28,7 @@ This documentation describes the current `final` branch.
 
 | Document | Description |
 | --- | --- |
-| [UniLearn Hub Professional Case Study](docs/UniLearn_Hub_Professional_Case_Study.pdf) | Portfolio-style PDF with architecture notes, implementation metrics, UI evidence, and member-wise contribution screenshots. |
+| [UniLearn Hub Professional Case Study](docs/UniLearn_Hub_Professional_Case_Study.pdf) | Project case-study PDF with architecture notes, implementation metrics, UI evidence, and member-wise contribution screenshots. |
 
 ## Technology Stack
 
@@ -64,7 +64,7 @@ Realtime support/direct chat:
 React client -> /ws/support WebSocket handshake -> SupportWebSocketAuthInterceptor -> SupportWebSocketHandler
 ```
 
-The frontend uses `frontend/ui/src/api.js` as the shared Axios client. The backend reads all sensitive runtime values from environment variables and keeps real credentials out of source control.
+The frontend calls the backend through the shared Axios client in `frontend/ui/src/api.js`. Runtime secrets stay in environment variables, so real credentials are not kept in source control.
 
 ## Core Functional Modules
 
@@ -217,7 +217,7 @@ WebSocket event types:
 - `POST /api/chat` provides a simple learning/help chat endpoint.
 - It answers predefined questions such as Uni Learn Hub, deep learning, and how to learn.
 - It can also search stored `Concept` records using fuzzy text matching through Apache Commons Text.
-- This is useful for lightweight problem asking or concept explanation flows.
+- This keeps the help chat lightweight for simple problem asking and concept explanation flows.
 
 #### Site Review System
 
@@ -676,6 +676,6 @@ npm run dev
 
 ## Development Notes
 
-The `final` branch is kept as the stable project branch. Source code, documentation, environment templates, and required project files are tracked in Git. Local uploads, logs, build outputs, IDE settings, and real `.env` files are intentionally ignored so the repository stays clean and safe to share.
+We keep the `final` branch as the stable project branch. Source code, documentation, environment templates, and required project files are tracked in Git. Local uploads, logs, build outputs, IDE settings, and real `.env` files are intentionally ignored so the repository is easier to run, review, and share.
 
 Before pushing future changes, run the relevant frontend or backend checks when possible. Frontend changes should pass `npm run lint` and `npm run build`; backend changes should pass Maven tests, or at minimum `./mvnw -DskipTests package` when a local PostgreSQL test database is not available.
