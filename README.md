@@ -484,6 +484,8 @@ Main endpoints:
 
 ```text
 UnilearnhubRepo/
+  pom.xml                     Root Maven aggregator for IntelliJ/Maven import
+
   backend/
     src/main/java/com/itpm/website/
       config/                  Web, upload, Jackson, WebSocket configuration
