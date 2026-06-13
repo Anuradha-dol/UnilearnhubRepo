@@ -28,7 +28,7 @@ const MyPostFeed = () => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [savedPostIds, setSavedPostIds] = useState([]);
 
-  const backendBase = api.defaults.baseURL || "http://localhost:8081";
+  const backendBase = api.defaults.baseURL || (typeof window !== "undefined" ? window.location.origin : "");
 
   const normalizeFeedItem = (item) => {
     const isShare = Boolean(item.originalPostId);

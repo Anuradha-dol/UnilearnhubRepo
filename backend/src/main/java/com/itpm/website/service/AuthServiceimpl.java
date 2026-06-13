@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
@@ -25,11 +26,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthServiceimpl implements AuthService {
 
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final EmailUtils emailUtils;
     private  final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+
+    @Value("${app.frontend-url:http://localhost:4173}")
+    private String frontendUrl;
 
     @Override
     public AuthResponse signUp(UserDto.RegisterRequest registerRequest) {
@@ -81,7 +87,7 @@ public class AuthServiceimpl implements AuthService {
         user.setIsVerified(false);
 
         //  Generate 6-digit verification code
-        int verificationCode = (int) (Math.random() * 900_000) + 100_000;
+        int verificationCode = SECURE_RANDOM.nextInt(900_000) + 100_000;
         user.setVerifyCode(String.valueOf(verificationCode));
         user.setVerifyCodeExpiry(new Date(System.currentTimeMillis() + 2 * 60 * 1000)); // 2 min expiry
         user.setLastOtpSentAt(new Date());
@@ -98,11 +104,11 @@ public class AuthServiceimpl implements AuthService {
                 <p>You have successfully registered to our application.</p>
                 <p>Verification code is <b>%s</b>.</p>
                 <p>Please click the link to verify your account:</p>
-                <a href="http://localhost:5173/verify?email=%s&code=%s">Verify Email</a>
+                <a href="%s/verify?email=%s&code=%s">Verify Email</a>
                 <p>This link will expire in 2 minutes.</p>
             </body>
         </html>
-        """.formatted(savedUser.getFirstname(), savedUser.getVerifyCode(), savedUser.getEmail(), savedUser.getVerifyCode());
+        """.formatted(savedUser.getFirstname(), savedUser.getVerifyCode(), frontendUrl, savedUser.getEmail(), savedUser.getVerifyCode());
 
         //  Send email
         try {
@@ -296,7 +302,7 @@ public class AuthServiceimpl implements AuthService {
         }
 
         // 5️⃣ Generate new OTP
-        int verificationCode = (int) (Math.random() * 900000) + 100000;
+        int verificationCode = SECURE_RANDOM.nextInt(900_000) + 100_000;
         user.setVerifyCode(String.valueOf(verificationCode));
         user.setVerifyCodeExpiry(new Date(System.currentTimeMillis() + 2 * 60 * 1000));
         user.setLastOtpSentAt(now);

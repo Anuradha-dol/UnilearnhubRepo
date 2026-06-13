@@ -5,20 +5,28 @@ import "./OngoingTasks.css";
 const OngoingTasks = () => {
   const [tasks, setTasks] = useState([]);
 
-  const fetchTasks = async () => {
-    try {
-      const res = await api.get("/tasks/my", { withCredentials: true });
-      const ongoingTasks = res.data.filter((task) => !(task.complete ?? task.isComplete));
-      setTasks(ongoingTasks);
-    } catch (err) {
-      console.error("Error fetching tasks:", err);
-    }
-  };
-
   useEffect(() => {
+    let cancelled = false;
+
+    const fetchTasks = async () => {
+      try {
+        const res = await api.get("/tasks/my", { withCredentials: true });
+        const ongoingTasks = res.data.filter((task) => !(task.complete ?? task.isComplete));
+        if (!cancelled) {
+          setTasks(ongoingTasks);
+        }
+      } catch (err) {
+        console.error("Error fetching tasks:", err);
+      }
+    };
+
     fetchTasks();
     const interval = setInterval(fetchTasks, 60000);
-    return () => clearInterval(interval);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
   }, []);
 
   const formatRemainingTime = (endDate) => {

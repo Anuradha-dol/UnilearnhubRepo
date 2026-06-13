@@ -9,9 +9,9 @@ spring:
       max-request-size: 500MB
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/itpm_uni_learnhub_project
-    username: postgres
-    password: 
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/itpm_uni_learnhub_project}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 20
@@ -21,26 +21,34 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update   # dev only, prod -> validate
+      ddl-auto: ${JPA_DDL_AUTO:update}
 
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: "anuradhawork123@gmail.com"
-    password: ""
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    from-address: ${MAIL_FROM:${MAIL_USERNAME:no-reply@unilearnhub.local}}
     properties:
       mail:
         smtp:
-          auth: true
+          auth: ${MAIL_SMTP_AUTH:true}
           starttls:
-            enable: true
+            enable: ${MAIL_STARTTLS_ENABLE:true}
 
   jwt:
-    secret: ""
+    secret: ${JWT_SECRET:}
 
   cookie:
-    secure: false     # true in production (HTTPS)
-    same-site: Lax    # None if frontend & backend are on different domains
+    secure: ${COOKIE_SECURE:false}
+    same-site: ${COOKIE_SAME_SITE:Lax}
+    domain: ${COOKIE_DOMAIN:}
 
 server:
-  port: 8081
+  port: ${SERVER_PORT:8081}
+
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:4173}
+
+file:
+  upload-dir: ${UPLOAD_DIR:uploads}

@@ -54,7 +54,9 @@ export default function Signup() {
         try {
           const res = await api.post("/auth/check-email", { email: form.email });
           if (!res.data.available) newErrors.email = "This email is already registered";
-        } catch {}
+        } catch (err) {
+          console.warn("Email availability check failed:", err);
+        }
       }
     }
 
@@ -69,7 +71,9 @@ export default function Signup() {
         try {
           const res = await api.post("/auth/check-phone", { phoneNumber: form.phoneNumber });
           if (!res.data.available) newErrors.phoneNumber = "Phone number already in use";
-        } catch {}
+        } catch (err) {
+          console.warn("Phone availability check failed:", err);
+        }
       }
     }
 

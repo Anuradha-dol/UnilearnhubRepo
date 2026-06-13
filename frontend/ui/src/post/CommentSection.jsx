@@ -11,7 +11,7 @@ const CommentSection = ({ postId }) => {
   const [replyingToId, setReplyingToId] = useState(null);
   const [replyDrafts, setReplyDrafts] = useState({});
   const [activeMenu, setActiveMenu] = useState(null);
-  const backendBase = api.defaults.baseURL || "http://localhost:8081";
+  const backendBase = api.defaults.baseURL || (typeof window !== "undefined" ? window.location.origin : "");
 
   const getReplyDraft = (commentId) => replyDrafts[commentId] || { content: "", file: null };
 

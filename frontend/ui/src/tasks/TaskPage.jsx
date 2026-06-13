@@ -5,7 +5,7 @@ import logo from "../assets/logo.png";
 import "../pages/Home.css";
 import "./TaskHub.css";
 import TaskList from "./TaskList";
-import TaskCreate from "./TaskCreate ";
+import TaskCreate from "./TaskCreate";
 
 const backgroundDecor = (
   <>

@@ -24,9 +24,6 @@ import LandingPage from "./landing/LandingPage";
 
 
 
-
-import './App.css';
-
 function App() {
   return (
     

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import logo from "../assets/logo.png";
-import MyPostFeed from "../post/MyPostFeed .jsx";
+import MyPostFeed from "../post/MyPostFeed.jsx";
 import "./Home.css";
 
 const interestMap = {

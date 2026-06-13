@@ -20,11 +20,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class ForgotPasswordServiceImpl implements ForgotPasswordService {
+
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     private final JwtUtils jwtUtils;
     private final UserRepo userRepo;
@@ -198,7 +201,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
     }
 
     private int generateOtp() {
-        return new Random().nextInt(100_000, 999_999);
+        return SECURE_RANDOM.nextInt(900_000) + 100_000;
     }
 
     private void sendOtpEmail(String email, int otp) {

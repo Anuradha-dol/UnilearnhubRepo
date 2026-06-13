@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +27,12 @@ public class AuthController {
     private final AuthService authService;
     private final UserRepo userRepo;
 
+    @Value("${spring.cookie.secure:false}")
+    private boolean cookieSecure;
+
+    @Value("${spring.cookie.domain:}")
+    private String cookieDomain;
+
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody UserDto.RegisterRequest registerRequest,
                                                  HttpServletResponse response) {
@@ -35,8 +42,10 @@ public class AuthController {
         emailCookie.setHttpOnly(true);
         emailCookie.setPath("/");
         emailCookie.setMaxAge(30 * 60);
-        emailCookie.setSecure(false);
-        emailCookie.setDomain("localhost");
+        emailCookie.setSecure(cookieSecure);
+        if (cookieDomain != null && !cookieDomain.isBlank()) {
+            emailCookie.setDomain(cookieDomain);
+        }
 
         response.addCookie(emailCookie);
 

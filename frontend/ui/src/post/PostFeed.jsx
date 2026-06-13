@@ -31,7 +31,7 @@ const PostFeed = () => {
   const [savedMode, setSavedMode] = useState(false);
   const [activeCollectionId, setActiveCollectionId] = useState(null);
   const [activeHashtag, setActiveHashtag] = useState("");
-  const backendBase = api.defaults.baseURL || "http://localhost:8081";
+  const backendBase = api.defaults.baseURL || (typeof window !== "undefined" ? window.location.origin : "");
   const MAX_CONTENT_LENGTH = 2000;
   const MAX_IMAGE_SIZE_MB = 5;
   const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];

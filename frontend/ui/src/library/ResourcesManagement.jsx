@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
@@ -43,18 +43,19 @@ export default function ResourcesManagement() {
     { label: "Admin Tasks", path: "/admin-task-manager" },
   ];
 
-  useEffect(() => {
-    fetchVideos();
-  }, []);
-
-  const fetchVideos = async () => {
+  const fetchVideos = useCallback(async () => {
     try {
       const res = await api.get("/api/videos/my", { withCredentials: true });
       setVideos(res.data);
     } catch (err) {
       console.error("Failed to fetch videos:", err);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const timerId = window.setTimeout(fetchVideos, 0);
+    return () => window.clearTimeout(timerId);
+  }, [fetchVideos]);
 
   const resetForm = () => {
     setFile(null);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PostFeed from "../post/PostFeed.jsx";
-import OngoingTasks from "../tasks/OngoingTasks ";
+import OngoingTasks from "../tasks/OngoingTasks";
 import api from "../api";
 import logo from "../assets/logo.png";
 import "./Home.css";

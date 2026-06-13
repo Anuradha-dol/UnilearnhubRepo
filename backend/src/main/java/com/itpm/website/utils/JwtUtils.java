@@ -6,6 +6,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtils {
 
-    @Value("Y2hhbGxlbmdlVG9Xcml0ZUZ1bGxQcmVkaWN0YWJsZVNlY3JldEtleQ==")
+    @Value("${spring.jwt.secret}")
     private String secretKey;
 
     @Value("${spring.cookie.secure:false}")
@@ -38,6 +39,27 @@ public class JwtUtils {
     private static final long ACCESS_EXPIRATION_MS = 60 * 60 * 1000;
     private static final long REFRESH_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000L;
     private static final long VERIFY_EXPIRATION_MS = 30 * 60 * 1000;
+    private SecretKey signingKey;
+
+    @PostConstruct
+    void validateSecretKey() {
+        if (secretKey == null || secretKey.isBlank()) {
+            throw new IllegalStateException("JWT_SECRET must be set to a Base64-encoded key with at least 32 bytes.");
+        }
+
+        byte[] keyBytes;
+        try {
+            keyBytes = Decoders.BASE64.decode(secretKey);
+        } catch (RuntimeException ex) {
+            throw new IllegalStateException("JWT_SECRET must be valid Base64.", ex);
+        }
+
+        if (keyBytes.length < 32) {
+            throw new IllegalStateException("JWT_SECRET must decode to at least 32 bytes for HS256 signing.");
+        }
+
+        signingKey = Keys.hmacShaKeyFor(keyBytes);
+    }
 
     public String generateToken(
             Map<String, Object> extraClaims,
@@ -111,8 +133,7 @@ public class JwtUtils {
     }
 
     private SecretKey getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
+        return signingKey;
     }
 
     private ResponseCookie buildCookie(String name, String value, long maxAgeSeconds) {
