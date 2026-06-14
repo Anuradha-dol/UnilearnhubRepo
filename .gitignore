@@ -29,3 +29,6 @@ backend/uploads/**
 **/uploads/**
 !**/uploads/
 !**/uploads/.gitkeep
+**/dist/
+**/build/
+frontend/ui/dist/
