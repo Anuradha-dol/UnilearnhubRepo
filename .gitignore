@@ -26,3 +26,15 @@ uploads/**
 backend/uploads/**
 !backend/uploads/
 !backend/uploads/.gitkeep
+# Local editor files
+**/.idea/
+**/.vscode/
+# Dependencies and build output
+**/node_modules/
+**/dist/
+build/
+**/build/
+**/uploads/**
+!**/uploads/
+!**/uploads/.gitkeep
+# Local secrets
