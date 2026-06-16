@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="docs/landing-page-screenshot.png"><strong>UI Screenshot</strong></a>
+  <a href="docs/landing-page-screenshot.png"><strong>Landing page UI Screenshot</strong></a>
   &nbsp;|&nbsp;
   <a href="docs/UniLearn_Hub_Professional_Case_Study.pdf"><strong>Project Report</strong></a>
 </p>
